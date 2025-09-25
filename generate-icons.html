@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Icons</title>
+</head>
+<body>
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    <canvas id="canvasFavicon" width="32" height="32"></canvas>
+    
+    <script>
+        function drawStethoscope(ctx, size) {
+            const scale = size / 24;
+            ctx.fillStyle = '#059669';
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 2 * scale;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            // Main vertical line
+            ctx.beginPath();
+            ctx.moveTo(11 * scale, 2 * scale);
+            ctx.lineTo(11 * scale, 22 * scale);
+            ctx.stroke();
+            
+            // Top branches
+            ctx.beginPath();
+            ctx.moveTo(15 * scale, 5 * scale);
+            ctx.lineTo(11 * scale, 9 * scale);
+            ctx.lineTo(7 * scale, 5 * scale);
+            ctx.stroke();
+            
+            // Right branch
+            ctx.beginPath();
+            ctx.moveTo(21 * scale, 15 * scale);
+            ctx.lineTo(19 * scale, 13 * scale);
+            ctx.lineTo(17 * scale, 15 * scale);
+            ctx.stroke();
+            
+            // Circles
+            ctx.beginPath();
+            ctx.arc(16 * scale, 19 * scale, 2 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(8 * scale, 19 * scale, 2 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        // Generate 192x192
+        const canvas192 = document.getElementById('canvas192');
+        const ctx192 = canvas192.getContext('2d');
+        ctx192.fillStyle = '#ffffff';
+        ctx192.fillRect(0, 0, 192, 192);
+        drawStethoscope(ctx192, 192);
+        
+        // Generate 512x512
+        const canvas512 = document.getElementById('canvas512');
+        const ctx512 = canvas512.getContext('2d');
+        ctx512.fillStyle = '#ffffff';
+        ctx512.fillRect(0, 0, 512, 512);
+        drawStethoscope(ctx512, 512);
+        
+        // Generate 32x32 favicon
+        const canvasFavicon = document.getElementById('canvasFavicon');
+        const ctxFavicon = canvasFavicon.getContext('2d');
+        ctxFavicon.fillStyle = '#ffffff';
+        ctxFavicon.fillRect(0, 0, 32, 32);
+        drawStethoscope(ctxFavicon, 32);
+        
+        // Download links
+        setTimeout(() => {
+            const link192 = document.createElement('a');
+            link192.download = 'icon-192.png';
+            link192.href = canvas192.toDataURL();
+            link192.click();
+            
+            const link512 = document.createElement('a');
+            link512.download = 'icon-512.png';
+            link512.href = canvas512.toDataURL();
+            link512.click();
+            
+            const linkFavicon = document.createElement('a');
+            linkFavicon.download = 'favicon.png';
+            linkFavicon.href = canvasFavicon.toDataURL();
+            linkFavicon.click();
+        }, 1000);
+    </script>
+</body>
+</html>
