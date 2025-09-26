@@ -127,14 +127,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary/30 to-background flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl mx-auto">
+      <div className="w-full max-w-4xl mx-auto px-2 sm:px-4">
         <Card className="shadow-strong w-full max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle className="text-center text-xl">Access Your Account</CardTitle>
+            <CardTitle className="text-center text-lg sm:text-xl">Access Your Account</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6">
             {/* OAuth Buttons */}
-            <div className="space-y-3 mb-6">
+            <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
               <Button 
                 variant="outline" 
                 className="w-full" 
@@ -179,7 +179,7 @@ const Auth = () => {
               </TabsList>
               
               <TabsContent value="signin">
-                <form onSubmit={handleSignIn} className="space-y-4">
+                <form onSubmit={handleSignIn} className="space-y-3 sm:space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
                     <div className="relative">
@@ -224,9 +224,9 @@ const Auth = () => {
                </TabsContent>
               
               <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
+                <form onSubmit={handleSignUp} className="space-y-3 sm:space-y-4">
                   {/* Basic account information */}
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     <div className="space-y-2">
                       <Label htmlFor="signup-email">Email</Label>
                       <div className="relative">
@@ -293,17 +293,17 @@ const Auth = () => {
                   
                   {/* Medical Knowledge Questions (Compulsory for all users) */}
                   <div>
-                    <h3 className="font-semibold mb-3 text-sm">Medical Knowledge Verification</h3>
-                    <p className="text-xs text-muted-foreground mb-4">
+                    <h3 className="font-semibold mb-2 sm:mb-3 text-sm">Medical Knowledge Verification</h3>
+                    <p className="text-xs text-muted-foreground mb-3 sm:mb-4">
                       Please answer these questions to verify your medical knowledge.
                     </p>
                     
-                    <div className="space-y-4">
-                      <div className="space-y-3">
-                        <Label className="text-sm font-medium">
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="space-y-2 sm:space-y-3">
+                        <Label className="text-xs sm:text-sm font-medium">
                           1. The most common type of anemia worldwide is:
                         </Label>
-                        <div className="space-y-2">
+                        <div className="space-y-1 sm:space-y-2">
                           {[
                             { value: 'A', label: 'Megaloblastic anemia' },
                             { value: 'B', label: 'Iron deficiency anemia' },
@@ -326,11 +326,11 @@ const Auth = () => {
                         </div>
                       </div>
                       
-                      <div className="space-y-3">
-                        <Label className="text-sm font-medium">
+                      <div className="space-y-2 sm:space-y-3">
+                        <Label className="text-xs sm:text-sm font-medium">
                           2. The causative agent of tuberculosis is:
                         </Label>
-                        <div className="space-y-2">
+                        <div className="space-y-1 sm:space-y-2">
                           {[
                             { value: 'A', label: 'Mycobacterium leprae' },
                             { value: 'B', label: 'Mycobacterium avium' },

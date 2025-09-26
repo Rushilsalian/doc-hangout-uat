@@ -251,8 +251,8 @@ const Collaborate = () => {
       <div className="flex-1 flex overflow-hidden h-full">
         {/* Left Sidebar - Fixed */}
         {sidebarOpen && (
-          <div className="w-80 bg-background border-r border-border flex-shrink-0 overflow-y-auto">
-            <div className="p-4 space-y-3">
+          <div className="w-80 lg:w-80 md:w-72 sm:w-64 bg-background border-r border-border flex-shrink-0 overflow-y-auto">
+            <div className="p-2 sm:p-4 space-y-3">
               {/* Quick Navigation */}
               <Card className="border-0 shadow-ghibli">
                 <CardContent className="p-4">
@@ -313,7 +313,7 @@ const Collaborate = () => {
 
         {/* Main Content - Scrollable */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
+          <div className="p-2 sm:p-4 space-y-4">
             {/* Sort Bar */}
             <Card className="border-0 shadow-ghibli">
               <CardContent className="p-3">
@@ -350,7 +350,7 @@ const Collaborate = () => {
                     </Button>
                   </div>
                   <Select value={filterBy} onValueChange={setFilterBy}>
-                    <SelectTrigger className="w-[140px] border-0 bg-muted/50">
+                    <SelectTrigger className="w-[140px] sm:w-[140px] w-[100px] border-0 bg-muted/50">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border-0 shadow-ghibli">
@@ -427,8 +427,8 @@ const Collaborate = () => {
         </div>
 
         {/* Right Sidebar - Fixed */}
-        <div className="w-80 bg-background border-l border-border flex-shrink-0 h-full overflow-y-auto">
-          <div className="p-4 space-y-3 pb-8">
+        <div className="w-80 lg:w-80 md:w-72 bg-background border-l border-border flex-shrink-0 h-full overflow-y-auto hidden lg:block">
+          <div className="p-2 sm:p-4 space-y-3 pb-8">
             <Card className="border-0 shadow-ghibli">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold text-ghibli-nature flex items-center gap-2">

@@ -144,11 +144,11 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="container py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-4">
           {/* Profile Header */}
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-6">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                 {!userId || userId === user.id ? (
                   <AvatarUpload 
                     currentAvatar={profile.avatar_url}
@@ -164,9 +164,9 @@ const Profile = () => {
                     </AvatarFallback>
                   </Avatar>
                 )}
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-2xl font-bold">
+                <div className="flex-1 text-center sm:text-left">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3 mb-2">
+                    <h1 className="text-xl sm:text-2xl font-bold">
                       {profile.display_name || 'Anonymous'}
                     </h1>
                     <Badge className={`${getRankColor(profile.rank)} flex items-center gap-1`}>
@@ -189,7 +189,7 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Karma Progress */}
             <Card>
               <CardHeader>
@@ -198,10 +198,10 @@ const Profile = () => {
                   Karma Progress
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold">{karma.totalKarma}</div>
-                  <p className="text-sm text-muted-foreground">Total Karma Points</p>
+                  <div className="text-2xl sm:text-3xl font-bold">{karma.totalKarma}</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total Karma Points</p>
                 </div>
                 
                 <div className="space-y-2">
@@ -252,30 +252,30 @@ const Profile = () => {
                   Rank System
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className={`p-3 rounded-lg border-2 ${profile.rank === 'General' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-200'}`}>
+              <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
+                <div className="space-y-2 sm:space-y-3">
+                  <div className={`p-2 sm:p-3 rounded-lg border-2 ${profile.rank === 'General' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-200'}`}>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">General</span>
-                      <span className="text-sm text-muted-foreground">500+ points</span>
+                      <span className="font-medium text-sm sm:text-base">General</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">500+ points</span>
                     </div>
                   </div>
-                  <div className={`p-3 rounded-lg border-2 ${profile.rank === 'Captain' ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>
+                  <div className={`p-2 sm:p-3 rounded-lg border-2 ${profile.rank === 'Captain' ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">Captain</span>
-                      <span className="text-sm text-muted-foreground">200-499 points</span>
+                      <span className="font-medium text-sm sm:text-base">Captain</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">200-499 points</span>
                     </div>
                   </div>
-                  <div className={`p-3 rounded-lg border-2 ${profile.rank === 'Sergeant' ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
+                  <div className={`p-2 sm:p-3 rounded-lg border-2 ${profile.rank === 'Sergeant' ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">Sergeant</span>
-                      <span className="text-sm text-muted-foreground">50-199 points</span>
+                      <span className="font-medium text-sm sm:text-base">Sergeant</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">50-199 points</span>
                     </div>
                   </div>
-                  <div className={`p-3 rounded-lg border-2 ${profile.rank === 'Recruit' ? 'border-gray-300 bg-gray-50' : 'border-gray-200'}`}>
+                  <div className={`p-2 sm:p-3 rounded-lg border-2 ${profile.rank === 'Recruit' ? 'border-gray-300 bg-gray-50' : 'border-gray-200'}`}>
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">Recruit</span>
-                      <span className="text-sm text-muted-foreground">0-49 points</span>
+                      <span className="font-medium text-sm sm:text-base">Recruit</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">0-49 points</span>
                     </div>
                   </div>
                 </div>

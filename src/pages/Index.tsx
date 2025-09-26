@@ -15,52 +15,52 @@ const Index = () => {
       <main>
         <HeroSection />
         {user ? (
-          <div className="container py-8">
-            <div className="grid lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-4">
+          <div className="container py-4 sm:py-8 px-2 sm:px-4">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-8">
+              <div className="lg:col-span-2 space-y-3 sm:space-y-4">
                 <FriendRequestNotifications />
                 <CommunityPreview />
               </div>
-              <div className="lg:col-span-1">
+              <div className="lg:col-span-1 hidden lg:block">
                 <TrendingPosts />
               </div>
             </div>
           </div>
         ) : (
-          <div className="container py-16">
-            <div className="max-w-4xl mx-auto text-center space-y-8">
-              <h2 className="text-3xl font-bold">Welcome to Doc Hangout</h2>
-              <p className="text-xl text-muted-foreground">
+          <div className="container py-8 sm:py-16 px-2 sm:px-4">
+            <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
+              <h2 className="text-2xl sm:text-3xl font-bold">Welcome to Doc Hangout</h2>
+              <p className="text-lg sm:text-xl text-muted-foreground px-2">
                 A secure, professional platform where verified medical professionals connect, collaborate, and share knowledge.
               </p>
               
-              <div className="grid md:grid-cols-3 gap-8 mt-12">
-                <div className="space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-2xl">🏥</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-8 sm:mt-12">
+                <div className="space-y-3 sm:space-y-4 p-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-xl sm:text-2xl">🏥</span>
                   </div>
-                  <h3 className="text-xl font-semibold">Verified Community</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-lg sm:text-xl font-semibold">Verified Community</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Join a community of verified medical professionals with automated credential verification.
                   </p>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-2xl">💬</span>
+                <div className="space-y-3 sm:space-y-4 p-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-xl sm:text-2xl">💬</span>
                   </div>
-                  <h3 className="text-xl font-semibold">Collaborate Safely</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-lg sm:text-xl font-semibold">Collaborate Safely</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Discuss cases, share insights, and get second opinions in a HIPAA-compliant environment.
                   </p>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-2xl">🎯</span>
+                <div className="space-y-3 sm:space-y-4 p-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-xl sm:text-2xl">🎯</span>
                   </div>
-                  <h3 className="text-xl font-semibold">Specialty Focus</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-lg sm:text-xl font-semibold">Specialty Focus</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     Connect with specialists in your field and explore other medical disciplines.
                   </p>
                 </div>

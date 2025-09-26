@@ -57,10 +57,10 @@ const Search = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="container py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-4">
           {/* Search Form */}
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <form onSubmit={handleSearch} className="space-y-4">
                 <div className="relative">
                   <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -73,9 +73,9 @@ const Search = () => {
                 </div>
                 
                 {/* Filters */}
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-2 sm:gap-4">
                   <Select value={filters.timeRange} onValueChange={(value: any) => setFilters(prev => ({ ...prev, timeRange: value }))}>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger className="w-24 sm:w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -87,7 +87,7 @@ const Search = () => {
                   </Select>
                   
                   <Select value={filters.sortBy} onValueChange={(value: any) => setFilters(prev => ({ ...prev, sortBy: value }))}>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger className="w-24 sm:w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -97,7 +97,7 @@ const Search = () => {
                   </Select>
                   
                   <Select value={filters.category} onValueChange={(value: any) => setFilters(prev => ({ ...prev, category: value }))}>
-                    <SelectTrigger className="w-40">
+                    <SelectTrigger className="w-32 sm:w-40">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -121,9 +121,9 @@ const Search = () => {
           {query && (
             <Tabs defaultValue="posts" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="posts">Posts ({results.posts?.length || 0})</TabsTrigger>
-                <TabsTrigger value="communities">Communities ({results.communities?.length || 0})</TabsTrigger>
-                <TabsTrigger value="users">Users ({results.users?.length || 0})</TabsTrigger>
+                <TabsTrigger value="posts" className="text-xs sm:text-sm">Posts ({results.posts?.length || 0})</TabsTrigger>
+                <TabsTrigger value="communities" className="text-xs sm:text-sm">Communities ({results.communities?.length || 0})</TabsTrigger>
+                <TabsTrigger value="users" className="text-xs sm:text-sm">Users ({results.users?.length || 0})</TabsTrigger>
               </TabsList>
               
               <TabsContent value="posts" className="space-y-4">
@@ -136,7 +136,7 @@ const Search = () => {
                 ) : (
                   results.posts?.map((post: any) => (
                     <Card key={post.id}>
-                      <CardContent className="p-6">
+                      <CardContent className="p-4 sm:p-6">
                         <div className="space-y-3">
                           <div className="flex items-start justify-between">
                             <h3 className="text-lg font-semibold">{post.title}</h3>
@@ -177,7 +177,7 @@ const Search = () => {
                 ) : (
                   results.communities?.map((community: any) => (
                     <Card key={community.id}>
-                      <CardContent className="p-6">
+                      <CardContent className="p-4 sm:p-6">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                             <Users className="h-6 w-6 text-primary" />
@@ -203,7 +203,7 @@ const Search = () => {
                 ) : (
                   results.users?.map((user: any) => (
                     <Card key={user.id}>
-                      <CardContent className="p-6">
+                      <CardContent className="p-4 sm:p-6">
                         <div className="flex items-center gap-4">
                           <Avatar className="h-12 w-12">
                             <AvatarFallback>{user.display_name?.[0] || 'U'}</AvatarFallback>

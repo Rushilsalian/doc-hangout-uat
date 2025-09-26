@@ -146,17 +146,17 @@ export const PostCard = ({
       <CardContent className="p-0">
         <div className="flex">
           {/* Reddit-style Vote Column */}
-          <div className="flex flex-col items-center p-2 bg-muted/30 min-w-[48px]">
+          <div className="flex flex-col items-center p-1 sm:p-2 bg-muted/30 min-w-[40px] sm:min-w-[48px]">
             <Button
               variant={localVote === 'upvote' ? 'ghibli' : 'ghost'}
               size="icon"
               onClick={() => handleVote('upvote')}
-              className="h-6 w-6 mb-1 hover:scale-110 transition-transform"
+              className="h-5 w-5 sm:h-6 sm:w-6 mb-1 hover:scale-110 transition-transform"
             >
-              <ArrowUp className="h-3 w-3" />
+              <ArrowUp className="h-2 w-2 sm:h-3 sm:w-3" />
             </Button>
             <span className={cn(
-              "text-xs font-medium px-1",
+              "text-xs font-medium px-1 text-center",
               localVote === 'upvote' && "text-ghibli-nature",
               localVote === 'downvote' && "text-destructive"
             )}>
@@ -166,17 +166,17 @@ export const PostCard = ({
               variant={localVote === 'downvote' ? 'destructive' : 'ghost'}
               size="icon"
               onClick={() => handleVote('downvote')}
-              className="h-6 w-6 mt-1 hover:scale-110 transition-transform"
+              className="h-5 w-5 sm:h-6 sm:w-6 mt-1 hover:scale-110 transition-transform"
             >
-              <ArrowDown className="h-3 w-3" />
+              <ArrowDown className="h-2 w-2 sm:h-3 sm:w-3" />
             </Button>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-3">
+          <div className="flex-1 p-2 sm:p-3">
             {/* Header */}
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-start justify-between mb-1 sm:mb-2">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-muted-foreground">
                 {showCommunity && post.community && (
                   <>
                     <span className="font-medium text-ghibli-nature">r/{post.community.name}</span>
@@ -211,22 +211,22 @@ export const PostCard = ({
 
             {/* Title */}
             <h3 className={cn(
-              "font-semibold leading-tight mb-2 hover:text-ghibli-nature cursor-pointer transition-colors",
-              compact ? "text-sm" : "text-base"
+              "font-semibold leading-tight mb-1 sm:mb-2 hover:text-ghibli-nature cursor-pointer transition-colors",
+              compact ? "text-sm" : "text-sm sm:text-base"
             )}>
               {post.title}
             </h3>
 
             {/* Content */}
             {!compact && (
-              <div className="text-sm text-muted-foreground mb-3">
+              <div className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
                 <p className="line-clamp-3">{post.content}</p>
               </div>
             )}
 
             {/* Tags */}
             {post.post_tags && post.post_tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
+              <div className="flex flex-wrap gap-1 mb-2 sm:mb-3">
                 {post.post_tags.slice(0, 4).map((tag) => (
                   <Badge key={tag.id} variant="outline" className="text-xs border-ghibli-nature/30 text-ghibli-nature hover:bg-ghibli-nature hover:text-white transition-colors cursor-pointer">
                     #{tag.tag}
@@ -242,22 +242,22 @@ export const PostCard = ({
 
             {/* Post Attachments */}
             {attachments.length > 0 && (
-              <div className="mb-3">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="mb-2 sm:mb-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2">
                   {attachments.map((attachment) => (
                     <div key={attachment.id} className="relative">
                       {attachment.file_type === 'image' ? (
                         <img
                           src={attachment.file_url}
                           alt={attachment.file_name || 'Post attachment'}
-                          className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                          className="w-full h-32 sm:h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                           onClick={() => window.open(attachment.file_url, '_blank')}
                         />
                       ) : attachment.file_type === 'video' ? (
                         <video
                           src={attachment.file_url}
                           controls
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full h-32 sm:h-48 object-cover rounded-lg"
                         />
                       ) : (
                         <div className="w-full h-24 bg-muted rounded-lg flex items-center justify-center">
@@ -274,7 +274,7 @@ export const PostCard = ({
             )}
 
             {/* Reddit-style Action Bar */}
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
               <Button
                 variant="ghost"
                 size="sm"
@@ -282,9 +282,9 @@ export const PostCard = ({
                   setShowComments(!showComments);
                   onComment?.(post.id);
                 }}
-                className="h-7 px-2 hover:bg-ghibli-sky/20 rounded-full"
+                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
               >
-                <MessageCircle className="h-3 w-3 mr-1" />
+                <MessageCircle className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                 <span>{commentCount} comments</span>
               </Button>
 
@@ -292,9 +292,9 @@ export const PostCard = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onShare?.(post)}
-                className="h-7 px-2 hover:bg-ghibli-sky/20 rounded-full"
+                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
               >
-                <Share className="h-3 w-3 mr-1" />
+                <Share className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                 <span>Share</span>
               </Button>
 
@@ -302,23 +302,23 @@ export const PostCard = ({
                 variant="ghost"
                 size="sm"
                 onClick={handleSave}
-                className="h-7 px-2 hover:bg-ghibli-sky/20 rounded-full"
+                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
               >
                 {isSaved ? (
                   <>
-                    <BookmarkCheck className="h-3 w-3 mr-1 text-ghibli-nature" />
+                    <BookmarkCheck className="h-2 w-2 sm:h-3 sm:w-3 mr-1 text-ghibli-nature" />
                     <span>Saved</span>
                   </>
                 ) : (
                   <>
-                    <Bookmark className="h-3 w-3 mr-1" />
+                    <Bookmark className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                     <span>Save</span>
                   </>
                 )}
               </Button>
 
-              <Button variant="ghost" size="sm" className="h-7 px-2 hover:bg-ghibli-sky/20 rounded-full">
-                <Award className="h-3 w-3 mr-1" />
+              <Button variant="ghost" size="sm" className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs">
+                <Award className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                 <span>Award</span>
               </Button>
             </div>
@@ -328,7 +328,7 @@ export const PostCard = ({
         {/* Comments Section */}
         <Collapsible open={showComments} onOpenChange={setShowComments}>
           <CollapsibleContent>
-            <div className="border-t border-border/50 mt-3 pt-3 px-3">
+            <div className="border-t border-border/50 mt-2 sm:mt-3 pt-2 sm:pt-3 px-2 sm:px-3">
               <CommentSection postId={post.id} />
             </div>
           </CollapsibleContent>

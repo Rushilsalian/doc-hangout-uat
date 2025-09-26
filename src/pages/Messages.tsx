@@ -188,10 +188,10 @@ const Messages = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="container py-4 sm:py-8">
-        <div className="grid lg:grid-cols-3 gap-4 lg:gap-6 h-[500px] sm:h-[600px]">
+      <div className="container py-2 sm:py-4 lg:py-8 px-2 sm:px-4">
+        <div className="grid lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 h-[calc(100vh-120px)] sm:h-[500px] lg:h-[600px]">
           {/* Conversations List */}
-          <Card className={`lg:col-span-1 ${hasSelection ? 'hidden lg:block' : ''}`}>
+          <Card className={`lg:col-span-1 ${hasSelection ? 'hidden lg:block' : 'col-span-full lg:col-span-1'}`}>
             <CardHeader className="flex-row items-center justify-between">
               <CardTitle className="text-lg sm:text-xl">Messages</CardTitle>
               <Dialog open={showCreateGroup} onOpenChange={setShowCreateGroup}>
@@ -333,7 +333,7 @@ const Messages = () => {
           </Card>
 
           {/* Chat Area */}
-          <Card className={`lg:col-span-2 ${!hasSelection ? 'hidden lg:block' : ''}`}>
+          <Card className={`lg:col-span-2 ${!hasSelection ? 'hidden lg:block' : 'col-span-full lg:col-span-2'}`}>
             {hasSelection ? (
               <>
                 <CardHeader className="border-b p-3 sm:p-6">
@@ -372,11 +372,11 @@ const Messages = () => {
                   </div>
                 </CardHeader>
                 
-                <CardContent className="flex flex-col h-[350px] sm:h-[400px] p-0">
+                <CardContent className="flex flex-col h-[calc(100vh-220px)] sm:h-[350px] lg:h-[400px] p-0">
                   {/* Messages */}
                   <div 
                     ref={messagesContainerRef}
-                    className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 p-3 sm:p-4"
+                    className="flex-1 overflow-y-auto space-y-2 sm:space-y-3 lg:space-y-4 p-2 sm:p-3 lg:p-4"
                   >
                     {messages.map((message) => {
                       const isOwnMessage = user && message.sender_id === user.id;
@@ -388,7 +388,7 @@ const Messages = () => {
                           }`}
                         >
                            <div
-                             className={`max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg ${
+                             className={`max-w-[90%] sm:max-w-[85%] lg:max-w-[70%] p-2 sm:p-3 rounded-lg text-sm sm:text-base ${
                                isOwnMessage
                                  ? "bg-primary text-primary-foreground ml-auto"
                                  : "bg-secondary mr-auto"
@@ -420,8 +420,8 @@ const Messages = () => {
                   </div>
 
                    {/* Message Input */}
-                  <div className="border-t p-3 sm:p-4">
-                    <div className="flex gap-2">
+                  <div className="border-t p-2 sm:p-3 lg:p-4">
+                    <div className="flex gap-1 sm:gap-2">
                        <Input
                          placeholder="Type a message..."
                          value={newMessage}
@@ -429,8 +429,8 @@ const Messages = () => {
                          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                          className="text-sm sm:text-base"
                        />
-                      <Button onClick={handleSendMessage} size="sm" className="px-3">
-                        <Send className="h-4 w-4" />
+                      <Button onClick={handleSendMessage} size="sm" className="px-2 sm:px-3">
+                        <Send className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Button>
                     </div>
                   </div>

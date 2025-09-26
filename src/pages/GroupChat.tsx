@@ -176,21 +176,24 @@ const GroupChat = () => {
   return (
     <div className="min-h-screen bg-ghibli-sage flex flex-col">
       <Header />
-      <div className="flex-1 container py-4 flex flex-col">
+      <div className="flex-1 container py-2 sm:py-4 flex flex-col px-2 sm:px-4">
         <Card className="flex-1 flex flex-col shadow-ghibli border-ghibli-forest/20">
-          <CardHeader className="flex-row items-center justify-between bg-gradient-to-r from-ghibli-forest/5 to-ghibli-nature/5 border-b border-ghibli-forest/10 shrink-0">
-            <CardTitle className="flex items-center gap-2 text-ghibli-forest">
-              <Users className="h-5 w-5" />
-              {currentGroup.name}
-              <Badge variant="secondary" className="bg-ghibli-nature/20 text-ghibli-forest border-ghibli-nature/30">
+          <CardHeader className="flex-col sm:flex-row items-center justify-between bg-gradient-to-r from-ghibli-forest/5 to-ghibli-nature/5 border-b border-ghibli-forest/10 shrink-0 p-3 sm:p-6 gap-2 sm:gap-0">
+            <CardTitle className="flex flex-col sm:flex-row items-center gap-2 text-ghibli-forest text-center sm:text-left">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="text-base sm:text-lg">{currentGroup.name}</span>
+              </div>
+              <Badge variant="secondary" className="bg-ghibli-nature/20 text-ghibli-forest border-ghibli-nature/30 text-xs">
                 {currentGroup.members?.length || 0} members
               </Badge>
             </CardTitle>
             <Dialog open={showMembers} onOpenChange={setShowMembers}>
               <DialogTrigger asChild>
-                <Button variant="ghibli" size="sm">
-                  <Users className="h-4 w-4 mr-2" />
-                  Members
+                <Button variant="ghibli" size="sm" className="text-xs sm:text-sm">
+                  <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Members</span>
+                  <span className="sm:hidden">({currentGroup.members?.length || 0})</span>
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-gradient-to-br from-ghibli-sage to-ghibli-forest/5 border-ghibli-forest/20">
@@ -233,7 +236,7 @@ const GroupChat = () => {
           
           {/* Chat Messages Area - Scrollable */}
           <div className="flex-1 overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-white/50 to-ghibli-sage/20">
+            <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4 bg-gradient-to-b from-white/50 to-ghibli-sage/20">
               {messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-ghibli-forest/60">
                   <div className="text-center">
@@ -248,13 +251,13 @@ const GroupChat = () => {
                     className={`flex ${message.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm ${
+                      className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-sm ${
                         message.sender_id === user?.id
                           ? 'bg-gradient-to-r from-ghibli-nature to-ghibli-sky text-white shadow-ghibli/20'
                           : 'bg-white border border-ghibli-forest/10 text-ghibli-forest shadow-ghibli/10'
                       }`}
                     >
-                       <p className="text-sm leading-relaxed">{message.content}</p>
+                       <p className="text-xs sm:text-sm leading-relaxed">{message.content}</p>
                        <div className="flex items-center justify-between mt-2">
                          <p className={`text-xs ${message.sender_id === user?.id ? 'text-white/70' : 'text-ghibli-forest/60'}`}>
                            {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -280,22 +283,22 @@ const GroupChat = () => {
             </div>
             
             {/* Message Input - Fixed at Bottom */}
-            <div className="p-4 bg-white/80 backdrop-blur-sm border-t border-ghibli-forest/10 shrink-0">
-              <form onSubmit={handleSendMessage} className="flex gap-3">
+            <div className="p-2 sm:p-4 bg-white/80 backdrop-blur-sm border-t border-ghibli-forest/10 shrink-0">
+              <form onSubmit={handleSendMessage} className="flex gap-2 sm:gap-3">
                 <Input
                   value={newMessage}
                   onChange={(e) => handleMessageChange(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 border-ghibli-forest/20 focus:border-ghibli-nature bg-white/90 rounded-full px-4 py-2"
+                  className="flex-1 border-ghibli-forest/20 focus:border-ghibli-nature bg-white/90 rounded-full px-3 sm:px-4 py-2 text-sm sm:text-base"
                 />
                 <Button 
                   type="submit" 
                   disabled={!newMessage.trim()}
                   variant="ghibli"
                   size="icon"
-                  className="rounded-full w-10 h-10 shrink-0"
+                  className="rounded-full w-8 h-8 sm:w-10 sm:h-10 shrink-0"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </form>
             </div>

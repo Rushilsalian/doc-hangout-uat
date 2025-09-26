@@ -124,7 +124,7 @@ const Communities = () => {
           </Dialog>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {communities.map((community) => {
             const IconComponent = getIconComponent(community.icon_name);
             
@@ -153,7 +153,7 @@ const Communities = () => {
                   </div>
                   
                   {/* Sub-sections */}
-                  <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
+                  <div className="grid grid-cols-2 gap-1 sm:gap-2 mb-4 text-xs">
                     {Object.entries(categoryConfig).map(([key, config]) => {
                       const count = community.category_counts?.[key as PostCategory] || 0;
                       const Icon = config.icon;
@@ -204,7 +204,7 @@ const Communities = () => {
         {/* Community Posts Dialog */}
         {selectedCommunity && (
           <Dialog open={!!selectedCommunity} onOpenChange={() => setSelectedCommunity(null)}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
               <DialogHeader>
                 <DialogTitle>
                   {communities.find(c => c.id === selectedCommunity)?.name} Posts
@@ -212,14 +212,16 @@ const Communities = () => {
               </DialogHeader>
               
               <Tabs value={selectedCategory} onValueChange={(value) => handleCategoryChange(value as PostCategory)}>
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
                   {Object.entries(categoryConfig).map(([key, config]) => {
                     const Icon = config.icon;
                     const count = communities.find(c => c.id === selectedCommunity)?.category_counts?.[key as PostCategory] || 0;
                     return (
-                      <TabsTrigger key={key} value={key} className="flex items-center gap-1">
+                      <TabsTrigger key={key} value={key} className="flex items-center gap-1 text-xs sm:text-sm">
                         <Icon className={`h-3 w-3 ${config.color}`} />
-                        {config.label} ({count})
+                        <span className="hidden sm:inline">{config.label}</span>
+                        <span className="sm:hidden">{config.label.slice(0, 3)}</span>
+                        <span className="hidden sm:inline">({count})</span>
                       </TabsTrigger>
                     );
                   })}

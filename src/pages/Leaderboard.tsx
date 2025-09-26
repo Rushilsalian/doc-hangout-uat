@@ -66,27 +66,29 @@ const Leaderboard = () => {
           <p className="text-muted-foreground">Top contributors to the medical community</p>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 px-2 sm:px-4">
           {users.map((user, index) => (
             <Card key={user.id} className={`${index < 3 ? 'border-2' : ''} ${
               index === 0 ? 'border-yellow-200 bg-yellow-50/50' :
               index === 1 ? 'border-gray-200 bg-gray-50/50' :
               index === 2 ? 'border-amber-200 bg-amber-50/50' : ''
             }`}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-12 h-12">
-                    {getRankIcon(index + 1)}
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12">
+                      {getRankIcon(index + 1)}
+                    </div>
+                    
+                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+                      <AvatarImage src={user.avatar_url || undefined} />
+                      <AvatarFallback>{user.display_name?.[0] || 'U'}</AvatarFallback>
+                    </Avatar>
                   </div>
                   
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={user.avatar_url || undefined} />
-                    <AvatarFallback>{user.display_name?.[0] || 'U'}</AvatarFallback>
-                  </Avatar>
-                  
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-lg">
+                  <div className="flex-1 text-center sm:text-left">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-2 mb-1">
+                      <h3 className="font-semibold text-base sm:text-lg">
                         {user.display_name || 'Anonymous'}
                       </h3>
                       <Badge className={`${getRankColor(user.rank)} flex items-center gap-1`}>
@@ -94,16 +96,16 @@ const Leaderboard = () => {
                         {user.rank}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {user.institution || 'Institution not specified'}
                     </p>
                   </div>
                   
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-primary">
+                  <div className="text-center sm:text-right">
+                    <div className="text-xl sm:text-2xl font-bold text-primary">
                       {user.totalKarma.toLocaleString()}
                     </div>
-                    <div className="text-sm text-muted-foreground">karma points</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">karma points</div>
                   </div>
                 </div>
               </CardContent>
