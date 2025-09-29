@@ -10,25 +10,47 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search as SearchIcon, Clock, TrendingUp, Users, MessageSquare, Star } from "lucide-react";
 import { globalSearch, SearchFilters } from '@/api/search';
+import { useAI } from '@/hooks/useAI';
+import IntelligentSearch from '@/components/IntelligentSearch';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const [results, setResults] = useState<any>({ posts: [], communities: [], users: [] });
   const [loading, setLoading] = useState(false);
+  const [useAISearch, setUseAISearch] = useState(true);
   const [filters, setFilters] = useState<SearchFilters>({
     timeRange: 'all',
     sortBy: 'recent',
     category: 'all'
   });
+  const { intelligentSearch } = useAI();
 
   const performSearch = async () => {
     if (!query.trim()) return;
     
     setLoading(true);
-    const searchResults = await globalSearch(query, filters);
-    setResults(searchResults);
-    setLoading(false);
+    try {
+      let searchResults;
+      if (useAISearch) {
+        const aiResults = await intelligentSearch(query, { contentType: 'all' });
+        // Convert AI results to expected format
+        searchResults = {
+          posts: aiResults.filter(r => r.result_type === 'post'),
+          communities: aiResults.filter(r => r.result_type === 'community'),
+          users: aiResults.filter(r => r.result_type === 'user'),
+          errors: { posts: null, communities: null, users: null }
+        };
+      } else {
+        searchResults = await globalSearch(query, filters);
+      }
+      setResults(searchResults);
+    } catch (error) {
+      console.error('Search error:', error);
+      setResults({ posts: [], communities: [], users: [] });
+    } finally {
+      setLoading(false);
+    }
     
     setSearchParams({ q: query });
   };
@@ -112,6 +134,21 @@ const Search = () => {
                   <Button type="submit" disabled={loading}>
                     {loading ? 'Searching...' : 'Search'}
                   </Button>
+                </div>
+                
+                {/* AI Search Toggle */}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="ai-search"
+                    checked={useAISearch}
+                    onChange={(e) => setUseAISearch(e.target.checked)}
+                    className="rounded"
+                  />
+                  <label htmlFor="ai-search" className="text-sm font-medium flex items-center gap-1">
+                    <Brain className="h-4 w-4 text-primary" />
+                    AI-Powered Search
+                  </label>
                 </div>
               </form>
             </CardContent>

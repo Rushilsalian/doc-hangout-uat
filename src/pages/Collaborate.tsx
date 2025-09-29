@@ -36,7 +36,8 @@ import {
   Star,
   Bookmark,
   Menu,
-  ChevronLeft
+  ChevronLeft,
+  Brain
 } from "lucide-react";
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
@@ -307,6 +308,27 @@ const Collaborate = () => {
               </Card>
 
               <TrendingTopicsManager />
+
+              {/* AI Dashboard Navigation */}
+              <Card className="border-0 shadow-ghibli">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-semibold text-ghibli-magic flex items-center gap-2">
+                    <Brain className="w-4 h-4" />
+                    AI Tools
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button 
+                    variant="ghibli" 
+                    size="sm" 
+                    className="w-full justify-start"
+                    onClick={() => navigate('/ai-dashboard')}
+                  >
+                    <Brain className="h-4 w-4 mr-2" />
+                    AI Dashboard
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         )}

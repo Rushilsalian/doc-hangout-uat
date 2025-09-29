@@ -17,7 +17,8 @@ import {
   Play,
   Image as ImageIcon,
   FileText,
-  BarChart3
+  BarChart3,
+  Sparkles
 } from "lucide-react";
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from "@/hooks/use-toast";
@@ -28,6 +29,7 @@ import type { Post } from '@/hooks/usePosts';
 import { cn } from "@/lib/utils";
 import { UserPopover } from '@/components/UserPopover';
 import { supabase } from '@/integrations/supabase/client';
+import AISummary from '@/components/AISummary';
 
 interface PostAttachment {
   id: string;
@@ -61,6 +63,7 @@ export const PostCard = ({
     post.user_vote?.vote_type as 'upvote' | 'downvote' || null
   );
   const [showComments, setShowComments] = useState(false);
+  const [showAISummary, setShowAISummary] = useState(false);
   const [attachments, setAttachments] = useState<PostAttachment[]>([]);
 
   useEffect(() => {
@@ -317,6 +320,16 @@ export const PostCard = ({
                 )}
               </Button>
 
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowAISummary(!showAISummary)}
+                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-primary/20 rounded-full text-xs"
+              >
+                <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                <span>AI Summary</span>
+              </Button>
+
               <Button variant="ghost" size="sm" className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs">
                 <Award className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                 <span>Award</span>
@@ -324,6 +337,19 @@ export const PostCard = ({
             </div>
           </div>
         </div>
+        
+        {/* AI Summary Section */}
+        <Collapsible open={showAISummary} onOpenChange={setShowAISummary}>
+          <CollapsibleContent>
+            <div className="border-t border-border/50 mt-2 sm:mt-3 pt-2 sm:pt-3 px-2 sm:px-3">
+              <AISummary 
+                postId={post.id}
+                content={post.content}
+                autoGenerate={false}
+              />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
         
         {/* Comments Section */}
         <Collapsible open={showComments} onOpenChange={setShowComments}>

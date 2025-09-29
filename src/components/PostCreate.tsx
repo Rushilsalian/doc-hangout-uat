@@ -21,6 +21,7 @@ import { useCommunities } from '@/hooks/useCommunities';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import ContentAnalyzer from '@/components/ContentAnalyzer';
 
 interface PostAttachment {
   file: File;
@@ -302,6 +303,14 @@ export const PostCreate = () => {
               required
             />
           </div>
+
+          {/* AI Content Analysis */}
+          {formData.content.length > 50 && (
+            <ContentAnalyzer 
+              content={formData.content}
+              autoAnalyze={true}
+            />
+          )}
 
           {/* File Attachments */}
           {(formData.post_type === 'image' || formData.post_type === 'video') && (

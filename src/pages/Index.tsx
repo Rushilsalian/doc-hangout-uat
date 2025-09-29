@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import CommunityPreview from "@/components/CommunityPreview";
 import AuthSection from "@/components/AuthSection";
 import TrendingPosts from "@/components/TrendingPosts";
+import TrendingTopics from "@/components/TrendingTopics";
 import { FriendRequestNotifications } from "@/components/FriendRequestNotifications";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,8 +22,9 @@ const Index = () => {
                 <FriendRequestNotifications />
                 <CommunityPreview />
               </div>
-              <div className="lg:col-span-1 hidden lg:block">
+              <div className="lg:col-span-1 hidden lg:block space-y-4">
                 <TrendingPosts />
+                <TrendingTopics limit={5} showGrowthRate={false} />
               </div>
             </div>
           </div>

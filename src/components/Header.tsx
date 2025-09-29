@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { UserPlus, LogIn, Stethoscope, LogOut, User, MessageCircle, Menu, Download, Users, Trophy, Search, Bookmark } from "lucide-react";
+import { UserPlus, LogIn, Stethoscope, LogOut, User, MessageCircle, Menu, Download, Users, Trophy, Search, Bookmark, Brain } from "lucide-react";
 import { useAuth } from '@/hooks/useAuth';
 import { usePWA } from '@/hooks/usePWA';
 import { useProfiles } from '@/hooks/useProfiles';
@@ -80,6 +80,10 @@ const Header = () => {
             <>
               <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
                 About
+              </Link>
+              <Link to="/ai-features" className="text-foreground/80 hover:text-foreground transition-colors flex items-center gap-1">
+                <Brain className="h-4 w-4" />
+                AI Features
               </Link>
               <Link to="/safety" className="text-foreground/80 hover:text-foreground transition-colors">
                 Safety
@@ -216,6 +220,10 @@ const Header = () => {
                     <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
                       <User className="h-5 w-5" />
                       About
+                    </Link>
+                    <Link to="/ai-features" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
+                      <Brain className="h-5 w-5" />
+                      AI Features
                     </Link>
                   </>
                 )}

@@ -13,6 +13,7 @@ import Communities from "./pages/Communities";
 import About from "./pages/About";
 import Safety from "./pages/Safety";
 import AIFeatures from "./pages/AIFeatures";
+import AIDashboard from "./pages/AIDashboard";
 import Messages from "./pages/Messages";
 import GroupChat from "./pages/GroupChat";
 import GroupInvite from "./pages/GroupInvite";
@@ -53,6 +54,7 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/safety" element={<Safety />} />
             <Route path="/ai-features" element={<AIFeatures />} />
+            <Route path="/ai-dashboard" element={<ProtectedRoute><AIDashboard /></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/group-chat/:groupId" element={<ProtectedRoute><GroupChat /></ProtectedRoute>} />
             <Route path="/group-invite/:token" element={<GroupInvite />} />
