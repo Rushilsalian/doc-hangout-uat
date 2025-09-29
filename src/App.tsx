@@ -24,7 +24,6 @@ import SavedPosts from "./pages/SavedPosts";
 import ProfileCompletion from "./pages/ProfileCompletion";
 import { Verification } from "./pages/Verification";
 import OAuthCallback from "./pages/OAuthCallback";
-import OAuthMandatoryQuestions from "./components/OAuthMandatoryQuestions";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -67,7 +66,6 @@ const App = () => {
             <Route path="/saved-posts" element={<ProtectedRoute><SavedPosts /></ProtectedRoute>} />
             <Route path="/verification" element={<ProtectedRoute><Verification /></ProtectedRoute>} />
             <Route path="/oauth-callback" element={<OAuthCallback />} />
-            <Route path="/oauth-questions" element={<OAuthMandatoryQuestions />} />
             <Route path="/profile-completion" element={<ProfileCompletion />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
