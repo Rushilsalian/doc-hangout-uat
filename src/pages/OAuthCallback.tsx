@@ -19,8 +19,20 @@ const OAuthCallback = () => {
         }
 
         if (data.session) {
-          // Successfully authenticated, redirect to profile completion
-          navigate('/profile-completion', { replace: true });
+          // Check if user has completed medical verification
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('medical_verification_completed')
+            .eq('id', data.session.user.id)
+            .single();
+
+          if (profile?.medical_verification_completed) {
+            // Already verified, go to profile completion
+            navigate('/profile-completion', { replace: true });
+          } else {
+            // Need to complete mandatory questions first
+            navigate('/oauth-questions', { replace: true });
+          }
         } else {
           // No session found, redirect to auth
           navigate('/auth', { replace: true });

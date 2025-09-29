@@ -55,7 +55,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: displayName ? { display_name: displayName } : undefined
+        data: displayName ? { 
+          display_name: displayName,
+          medical_verification_completed: true 
+        } : { medical_verification_completed: true }
       }
     });
     return { error };
