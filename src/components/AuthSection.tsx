@@ -10,6 +10,7 @@ import {
   Award
 } from "lucide-react";
 import { Link } from 'react-router-dom';
+import ghibliMedicalBg from "@/assets/ghibli-medical-bg.jpg";
 
 const verificationSteps = [
   {
@@ -54,8 +55,11 @@ const features = [
 
 const AuthSection = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-secondary/30 to-background">
-      <div className="container">
+    <section className="py-20 bg-gradient-to-b from-secondary/30 to-background relative">
+      <div className="absolute inset-0 opacity-10">
+        <img src={ghibliMedicalBg} alt="" className="w-full h-full object-cover" />
+      </div>
+      <div className="container relative z-10">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-4">
             <Shield className="h-3 w-3 mr-1" />

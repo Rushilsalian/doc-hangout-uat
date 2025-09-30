@@ -11,6 +11,7 @@ import IntelligentSearch from '@/components/IntelligentSearch';
 import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { SmartSummaryDemo, ClinicalInsightsDemo, IntelligentSearchDemo, TrendingAnalysisDemo } from '@/components/AIFeatureDemo';
+import ghibliMedicalBg from '@/assets/ghibli-medical-bg.jpg';
 
 const AIFeatures = () => {
   const { user } = useAuth();
@@ -24,9 +25,12 @@ const AIFeatures = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <div className="absolute inset-0 opacity-5">
+        <img src={ghibliMedicalBg} alt="" className="w-full h-full object-cover" />
+      </div>
       <Header />
-      <div className="container py-8">
+      <div className="container py-8 relative z-10">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Header Section */}
           <div className="text-center space-y-4">

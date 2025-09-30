@@ -6,6 +6,9 @@ import TrendingPosts from "@/components/TrendingPosts";
 import TrendingTopics from "@/components/TrendingTopics";
 import { FriendRequestNotifications } from "@/components/FriendRequestNotifications";
 import { useAuth } from "@/hooks/useAuth";
+import diningImage from "@/assets/doc-hangout-dining.webp";
+import girlImage from "@/assets/doc-hangout-girl.webp";
+import worldImage from "@/assets/doc-hangout-world.webp";
 
 const Index = () => {
   const { user } = useAuth();
@@ -37,30 +40,24 @@ const Index = () => {
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-8 sm:mt-12">
-                <div className="space-y-3 sm:space-y-4 p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-xl sm:text-2xl">🏥</span>
-                  </div>
+                <div className="space-y-3 sm:space-y-4 p-4 text-center">
+                  <img src={worldImage} alt="Global medical community" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Verified Community</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Join a community of verified medical professionals with automated credential verification.
                   </p>
                 </div>
                 
-                <div className="space-y-3 sm:space-y-4 p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-xl sm:text-2xl">💬</span>
-                  </div>
+                <div className="space-y-3 sm:space-y-4 p-4 text-center">
+                  <img src={diningImage} alt="Medical collaboration" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Collaborate Safely</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Discuss cases, share insights, and get second opinions in a HIPAA-compliant environment.
                   </p>
                 </div>
                 
-                <div className="space-y-3 sm:space-y-4 p-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-xl sm:text-2xl">🎯</span>
-                  </div>
+                <div className="space-y-3 sm:space-y-4 p-4 text-center">
+                  <img src={girlImage} alt="Medical professional" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Specialty Focus</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Connect with specialists in your field and explore other medical disciplines.

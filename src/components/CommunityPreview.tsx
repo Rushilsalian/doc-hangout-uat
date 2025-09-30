@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { useKarma } from "@/hooks/useKarma";
 import { useCommunities } from "@/hooks/useCommunities";
 import { usePosts } from "@/hooks/usePosts";
+import ghibliCollaboration from "@/assets/ghibli-collaboration.jpg";
 import { 
   Heart, 
   Brain, 
@@ -77,8 +78,11 @@ const CommunityPreview = () => {
     .slice(0, 3);
   
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-secondary/30">
-      <div className="container">
+    <section className="py-20 bg-gradient-to-b from-background to-secondary/30 relative">
+      <div className="absolute inset-0 opacity-5">
+        <img src={ghibliCollaboration} alt="" className="w-full h-full object-cover" />
+      </div>
+      <div className="container relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Specialty Hangout Rooms

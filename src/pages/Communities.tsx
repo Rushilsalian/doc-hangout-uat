@@ -12,6 +12,7 @@ import { useKarmaSystem } from "@/hooks/useKarmaSystem";
 import { useState } from "react";
 import { Heart, Brain, Eye, Bone, Users, MessageCircle, Plus, Check, GraduationCap, Stethoscope, Coffee } from "lucide-react";
 import * as LucideIcons from "lucide-react";
+import ghibliCollaboration from "@/assets/ghibli-collaboration.jpg";
 
 // Icon mapping for dynamic icons
 const getIconComponent = (iconName: string) => {
@@ -88,9 +89,12 @@ const Communities = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <div className="absolute inset-0 opacity-5">
+        <img src={ghibliCollaboration} alt="" className="w-full h-full object-cover" />
+      </div>
       <Header />
-      <div className="container py-8">
+      <div className="container py-8 relative z-10">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Specialty Hangout Rooms</h1>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>

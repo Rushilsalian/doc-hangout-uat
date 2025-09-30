@@ -3,7 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, Users, Brain } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import heroImage from "@/assets/medical-hero.jpg";
+import heroGif from "@/assets/doc-hangout.gif";
+import teamImage from "@/assets/doc-hangout-team.webp";
+import discussionImage from "@/assets/doc-hangout-discussion.webp";
+import worldImage from "@/assets/doc-hangout-world.webp";
+import girlImage from "@/assets/doc-hangout-girl.webp";
 import PlatformStats from "@/components/PlatformStats";
 
 const HeroSection = () => {
@@ -61,11 +65,13 @@ const HeroSection = () => {
 
           <div className="relative order-first lg:order-last">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl lg:rounded-3xl blur-2xl lg:blur-3xl" />
-            <img
-              src={heroImage}
-              alt="Medical professionals collaborating"
-              className="relative rounded-xl lg:rounded-2xl shadow-strong w-full h-48 sm:h-64 lg:h-auto object-cover lg:object-contain"
-            />
+            <div className="relative">
+              <img
+                src={heroGif}
+                alt="Doc Hangout in action"
+                className="rounded-xl shadow-strong w-full h-48 sm:h-64 object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>
