@@ -18,7 +18,7 @@ const HeroSection = () => {
     if (user) {
       navigate('/collaborate');
     } else {
-      navigate('/auth');
+      navigate('/auth', { state: { defaultTab: 'signup' } });
     }
   };
   

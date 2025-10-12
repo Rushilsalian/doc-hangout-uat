@@ -17,6 +17,7 @@ const Auth = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(location.state?.defaultTab || 'signin');
   
   // Get the intended destination from location state, default to profile-completion
   const from = location.state?.from?.pathname || '/profile-completion';
@@ -172,7 +173,7 @@ const Auth = () => {
               </div>
             </div>
             
-            <Tabs defaultValue="signin" className="w-full mt-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>

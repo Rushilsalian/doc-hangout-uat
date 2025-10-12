@@ -3,7 +3,7 @@ import { UserPlus, LogIn, Stethoscope, LogOut, User, MessageCircle, Menu, Downlo
 import { useAuth } from '@/hooks/useAuth';
 import { usePWA } from '@/hooks/usePWA';
 import { useProfiles } from '@/hooks/useProfiles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AvatarUpload } from '@/components/AvatarUpload';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -18,8 +18,13 @@ const Header = () => {
   const { isInstallable, installApp } = usePWA();
   const { fetchProfile } = useProfiles();
   const { totalUnreadCount } = useMessages();
+  const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleJoinHangout = () => {
+    navigate('/auth', { state: { defaultTab: 'signup' } });
+  };
 
   useEffect(() => {
     if (user) {
@@ -140,12 +145,10 @@ const Header = () => {
                   Login
                 </Button>
               </Link>
-              <Link to="/auth">
-                <Button variant="ghibli" size="sm" className="hover:scale-105 transition-transform">
-                  <UserPlus className="h-4 w-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Join Hangout</span>
-                </Button>
-              </Link>
+              <Button variant="ghibli" size="sm" className="hover:scale-105 transition-transform" onClick={handleJoinHangout}>
+                <UserPlus className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Join Hangout</span>
+              </Button>
             </>
           )}
           
