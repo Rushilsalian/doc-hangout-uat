@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { UserPopover } from '@/components/UserPopover';
 import { supabase } from '@/integrations/supabase/client';
 import AISummary from '@/components/AISummary';
+import { VideoPlayer } from '@/components/VideoPlayer';
 
 interface PostAttachment {
   id: string;
@@ -257,10 +258,10 @@ export const PostCard = ({
                           onClick={() => window.open(attachment.file_url, '_blank')}
                         />
                       ) : attachment.file_type === 'video' ? (
-                        <video
+                        <VideoPlayer
                           src={attachment.file_url}
-                          controls
-                          className="w-full h-32 sm:h-48 object-cover rounded-lg"
+                          className="w-full h-32 sm:h-48 shadow-md hover:shadow-lg transition-shadow"
+                          autoPlay={true}
                         />
                       ) : (
                         <div className="w-full h-24 bg-muted rounded-lg flex items-center justify-center">
