@@ -121,7 +121,7 @@ const AuthSection = () => {
               </div>
               
               <div className="space-y-3">
-                <Link to="/auth" className="block">
+                <Link to="/auth" state={{ defaultTab: 'signup' }} className="block">
                   <Button variant="hero" size="lg" className="w-full">
                     <UserCheck className="h-5 w-5" />
                     Start Verification Process
