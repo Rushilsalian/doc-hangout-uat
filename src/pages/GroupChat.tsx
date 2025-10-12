@@ -1,29 +1,41 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from "@/components/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useMessages } from '@/hooks/useMessages';
 import { useAuth } from '@/hooks/useAuth';
-import { Users, Send, UserPlus, UserMinus } from 'lucide-react';
+import { Users, Send, UserPlus, UserMinus, Plus, Search } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import TypingIndicator from '@/components/TypingIndicator';
 import { supabase } from '@/integrations/supabase/client';
+import { UserSearchDialog } from '@/components/UserSearchDialog';
+import { GroupCreationDialog } from '@/components/GroupCreationDialog';
+import ChatSearch from '@/components/ChatSearch';
 
 const GroupChat = () => {
   const { groupId } = useParams<{ groupId: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { 
+    conversations,
     groupConversations, 
     messages, 
+    selectedConversationId,
+    selectedGroupId,
+    sendMessage,
     sendGroupMessage, 
     fetchGroupMessages,
     addMember,
     removeMember,
-    selectGroupConversation 
+    selectConversation,
+    selectGroupConversation,
+    refreshCounts
   } = useMessages();
   
   const [newMessage, setNewMessage] = useState('');
@@ -32,6 +44,9 @@ const GroupChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [otherUserTyping, setOtherUserTyping] = useState<{userId: string, userName: string} | null>(null);
+  const [activeTab, setActiveTab] = useState('groups');
+  const [isUserSearchOpen, setIsUserSearchOpen] = useState(false);
+  const [isGroupDialogOpen, setIsGroupDialogOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const currentGroup = groupConversations.find(g => g.id === groupId);
@@ -173,138 +188,323 @@ const GroupChat = () => {
     );
   }
 
+  const handleSendDirectMessage = async () => {
+    if (!newMessage.trim()) return;
+    if (!selectedConversationId) return;
+
+    const success = await sendMessage(newMessage, selectedConversationId);
+    if (success) {
+      setNewMessage('');
+      setIsTyping(false);
+      broadcastTypingStatus(false);
+      if (typingTimer) {
+        clearTimeout(typingTimer);
+        setTypingTimer(null);
+      }
+    }
+  };
+
+  const selectedConv = conversations.find(c => c.id === selectedConversationId);
+  const isDirectChat = !!selectedConversationId;
+  const hasSelection = selectedConversationId || selectedGroupId;
+
   return (
-    <div className="min-h-screen bg-ghibli-sage flex flex-col">
+    <div className="min-h-screen bg-background">
       <Header />
-      <div className="flex-1 container py-2 sm:py-4 flex flex-col px-2 sm:px-4">
-        <Card className="flex-1 flex flex-col shadow-ghibli border-ghibli-forest/20">
-          <CardHeader className="flex-col sm:flex-row items-center justify-between bg-gradient-to-r from-ghibli-forest/5 to-ghibli-nature/5 border-b border-ghibli-forest/10 shrink-0 p-3 sm:p-6 gap-2 sm:gap-0">
-            <CardTitle className="flex flex-col sm:flex-row items-center gap-2 text-ghibli-forest text-center sm:text-left">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="text-base sm:text-lg">{currentGroup.name}</span>
-              </div>
-              <Badge variant="secondary" className="bg-ghibli-nature/20 text-ghibli-forest border-ghibli-nature/30 text-xs">
-                {currentGroup.members?.length || 0} members
-              </Badge>
-            </CardTitle>
-            <Dialog open={showMembers} onOpenChange={setShowMembers}>
-              <DialogTrigger asChild>
-                <Button variant="ghibli" size="sm" className="text-xs sm:text-sm">
-                  <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Members</span>
-                  <span className="sm:hidden">({currentGroup.members?.length || 0})</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-gradient-to-br from-ghibli-sage to-ghibli-forest/5 border-ghibli-forest/20">
-                <DialogHeader>
-                  <DialogTitle className="text-ghibli-forest">Group Members</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="User ID to add"
-                      value={newMemberEmail}
-                      onChange={(e) => setNewMemberEmail(e.target.value)}
-                      className="border-ghibli-forest/20 focus:border-ghibli-nature"
+      <div className="container py-2 sm:py-4 lg:py-8 px-2 sm:px-4">
+        <div className="grid lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
+          {/* Conversations List */}
+          <Card className="lg:col-span-1">
+            <CardHeader className="flex-row items-center justify-between">
+              <CardTitle className="text-lg sm:text-xl">Messages</CardTitle>
+              <Dialog open={isGroupDialogOpen} onOpenChange={setIsGroupDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+              </Dialog>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="direct">Direct</TabsTrigger>
+                  <TabsTrigger value="groups">Groups</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="direct" className="mt-0">
+                  <div className="p-3 border-b space-y-2">
+                    <ChatSearch 
+                      onConversationSelect={selectConversation}
+                      onGroupSelect={selectGroupConversation}
                     />
-                    <Button onClick={handleAddMember} size="sm" variant="ghibli">
-                      <UserPlus className="h-4 w-4" />
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setIsUserSearchOpen(true)}
+                      className="w-full"
+                    >
+                      <Search className="h-4 w-4 mr-2" />
+                      Find Users
                     </Button>
                   </div>
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {currentGroup.members?.map((member) => (
-                      <div key={member.id} className="flex items-center justify-between p-3 border border-ghibli-forest/10 rounded-lg bg-white/50">
-                        <span className="text-ghibli-forest font-medium">{member.display_name || 'Anonymous'}</span>
-                        {currentGroup.created_by === user?.id && member.id !== user?.id && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRemoveMember(member.id)}
-                            className="text-ghibli-sunset hover:text-destructive"
-                          >
-                            <UserMinus className="h-4 w-4" />
-                          </Button>
-                        )}
+                  <div className="space-y-1">
+                    {conversations.map((conv) => (
+                      <div
+                        key={conv.id}
+                        className={`p-3 sm:p-4 cursor-pointer hover:bg-secondary/50 border-b ${
+                          selectedConversationId === conv.id ? 'bg-secondary' : ''
+                        }`}
+                        onClick={() => selectConversation(conv.id)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback>{conv.other_participant.display_name?.[0] || 'U'}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <p className="font-medium truncate">{conv.other_participant.display_name || 'Anonymous'}</p>
+                              {conv.unread_count > 0 && (
+                                <Badge variant="destructive" className="text-xs">
+                                  {conv.unread_count}
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground truncate">
+                              {conv.last_message?.content || 'No messages yet'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </CardHeader>
-          
-          {/* Chat Messages Area - Scrollable */}
-          <div className="flex-1 overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4 bg-gradient-to-b from-white/50 to-ghibli-sage/20">
-              {messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-ghibli-forest/60">
-                  <div className="text-center">
-                    <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No messages yet. Start the conversation!</p>
-                  </div>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-sm ${
-                        message.sender_id === user?.id
-                          ? 'bg-gradient-to-r from-ghibli-nature to-ghibli-sky text-white shadow-ghibli/20'
-                          : 'bg-white border border-ghibli-forest/10 text-ghibli-forest shadow-ghibli/10'
-                      }`}
+                </TabsContent>
+                
+                <TabsContent value="groups" className="mt-0">
+                  <div className="p-3 border-b">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setIsGroupDialogOpen(true)}
+                      className="w-full"
                     >
-                       <p className="text-xs sm:text-sm leading-relaxed">{message.content}</p>
-                       <div className="flex items-center justify-between mt-2">
-                         <p className={`text-xs ${message.sender_id === user?.id ? 'text-white/70' : 'text-ghibli-forest/60'}`}>
-                           {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                         </p>
-                         {message.sender_id === user?.id && (
-                           <div className="flex items-center gap-1">
-                             <span className="text-xs text-white/70">
-                               {message.read_at ? 'Seen' : 'Sent'}
-                             </span>
-                             <div className={`w-2 h-2 rounded-full ${message.read_at ? 'bg-green-300' : 'bg-white/50'}`} />
-                           </div>
-                         )}
-                       </div>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Group
+                    </Button>
+                  </div>
+                  <div className="space-y-1">
+                    {groupConversations.map((group) => (
+                      <div
+                        key={group.id}
+                        className={`p-3 sm:p-4 cursor-pointer hover:bg-secondary/50 border-b ${
+                          selectedGroupId === group.id ? 'bg-secondary' : ''
+                        }`}
+                        onClick={() => selectGroupConversation(group.id)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <p className="font-medium truncate">{group.name}</p>
+                              <div className="flex items-center gap-2">
+                                {group.unread_count > 0 && (
+                                  <Badge variant="destructive" className="text-xs">
+                                    {group.unread_count}
+                                  </Badge>
+                                )}
+                                <Badge variant="secondary" className="text-xs">
+                                  {group.members?.length || 0}
+                                </Badge>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground truncate">
+                              {group.last_message?.content || 'No messages yet'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+
+          {/* Chat Area */}
+          <Card className="lg:col-span-2">
+            {hasSelection ? (
+              <>
+                <CardHeader className="border-b p-3 sm:p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {selectedGroupId ? (
+                        <>
+                          <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
+                            <Users className="h-4 w-4 text-primary" />
+                          </div>
+                          <CardTitle className="text-base sm:text-lg truncate">{currentGroup?.name}</CardTitle>
+                          <Badge variant="secondary" className="text-xs">
+                            {currentGroup?.members?.length || 0} members
+                          </Badge>
+                        </>
+                      ) : (
+                        <>
+                          <Avatar className="h-8 w-8">
+                            <AvatarFallback>{selectedConv?.other_participant.display_name?.[0] || 'U'}</AvatarFallback>
+                          </Avatar>
+                          <CardTitle className="text-base sm:text-lg truncate">{selectedConv?.other_participant.display_name || 'Anonymous'}</CardTitle>
+                        </>
+                      )}
+                    </div>
+                    {selectedGroupId && (
+                      <Dialog open={showMembers} onOpenChange={setShowMembers}>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <Users className="h-4 w-4 mr-2" />
+                            Members
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Group Members</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="User ID to add"
+                                value={newMemberEmail}
+                                onChange={(e) => setNewMemberEmail(e.target.value)}
+                              />
+                              <Button onClick={handleAddMember} size="sm">
+                                <UserPlus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                              {currentGroup?.members?.map((member) => (
+                                <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
+                                  <span>{member.display_name || 'Anonymous'}</span>
+                                  {currentGroup.created_by === user?.id && member.id !== user?.id && (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleRemoveMember(member.id)}
+                                    >
+                                      <UserMinus className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    )}
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="flex flex-col h-[calc(100vh-220px)] min-h-0 p-0">
+                  {/* Messages */}
+                  <div className="flex-1 overflow-y-auto space-y-3 p-3 sm:p-4">
+                    {messages.length === 0 ? (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        <div className="text-center">
+                          <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>No messages yet. Start the conversation!</p>
+                        </div>
+                      </div>
+                    ) : (
+                      messages.map((message) => {
+                        const isOwnMessage = message.sender_id === user?.id;
+                        return (
+                          <div
+                            key={message.id}
+                            className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div
+                              className={`max-w-[85%] sm:max-w-[70%] lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-sm ${
+                                isOwnMessage
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-secondary border'
+                              }`}
+                            >
+                              <p className="text-sm leading-relaxed break-words">{message.content}</p>
+                              <div className={`flex items-center justify-between mt-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+                                <p className="text-xs opacity-70">
+                                  {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </p>
+                                {isOwnMessage && (
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-xs opacity-70">
+                                      {message.read_at ? 'Seen' : 'Sent'}
+                                    </span>
+                                    <div className={`w-2 h-2 rounded-full ${message.read_at ? 'bg-green-400' : 'bg-gray-400'}`} />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                    <TypingIndicator 
+                      isTyping={!!otherUserTyping} 
+                      userName={otherUserTyping?.userName}
+                    />
+                    <div ref={messagesEndRef} />
+                  </div>
+
+                  {/* Message Input - Fixed at Bottom */}
+                  <div className="border-t p-3 sm:p-4 bg-background/95 backdrop-blur-sm shrink-0">
+                    <div className="flex gap-2 sm:gap-3">
+                      <Input
+                        placeholder="Type a message..."
+                        value={newMessage}
+                        onChange={(e) => handleMessageChange(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && (selectedGroupId ? handleSendMessage(e) : handleSendDirectMessage())}
+                        className="flex-1 rounded-full px-4 py-2 text-sm sm:text-base"
+                      />
+                      <Button 
+                        onClick={selectedGroupId ? (e) => handleSendMessage(e) : handleSendDirectMessage}
+                        size="icon" 
+                        className="rounded-full w-10 h-10 shrink-0"
+                        disabled={!newMessage.trim()}
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                ))
-              )}
-              <TypingIndicator 
-                isTyping={!!otherUserTyping} 
-                userName={otherUserTyping?.userName}
-              />
-              <div ref={messagesEndRef} />
-            </div>
-            
-            {/* Message Input - Fixed at Bottom */}
-            <div className="p-2 sm:p-4 bg-white/80 backdrop-blur-sm border-t border-ghibli-forest/10 shrink-0">
-              <form onSubmit={handleSendMessage} className="flex gap-2 sm:gap-3">
-                <Input
-                  value={newMessage}
-                  onChange={(e) => handleMessageChange(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 border-ghibli-forest/20 focus:border-ghibli-nature bg-white/90 rounded-full px-3 sm:px-4 py-2 text-sm sm:text-base"
-                />
-                <Button 
-                  type="submit" 
-                  disabled={!newMessage.trim()}
-                  variant="ghibli"
-                  size="icon"
-                  className="rounded-full w-8 h-8 sm:w-10 sm:h-10 shrink-0"
-                >
-                  <Send className="h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              </form>
-            </div>
-          </div>
-        </Card>
+                </CardContent>
+              </>
+            ) : (
+              <CardContent className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground text-center px-4">Select a conversation to start messaging</p>
+              </CardContent>
+            )}
+          </Card>
+        </div>
       </div>
+
+      {/* User Search Dialog */}
+      <UserSearchDialog 
+        open={isUserSearchOpen}
+        onOpenChange={setIsUserSearchOpen}
+        onConversationCreated={(conversationId) => {
+          selectConversation(conversationId);
+          setActiveTab('direct');
+        }}
+      />
+
+      {/* Group Creation Dialog */}
+      <GroupCreationDialog
+        open={isGroupDialogOpen}
+        onOpenChange={setIsGroupDialogOpen}
+        onGroupCreated={(groupId) => {
+          selectGroupConversation(groupId);
+          setActiveTab('groups');
+        }}
+      />
     </div>
   );
 };

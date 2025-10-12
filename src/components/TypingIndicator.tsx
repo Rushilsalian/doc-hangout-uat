@@ -27,13 +27,17 @@ export const TypingIndicator = ({ isTyping, userName = 'Someone' }: TypingIndica
   if (!isTyping) return null;
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
-      <div className="flex space-x-1">
-        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-        <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+    <div className="flex justify-start">
+      <div className="max-w-[85%] sm:max-w-[70%] lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl bg-secondary/50 border border-dashed">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+          <span>{userName} is typing{dots}</span>
+        </div>
       </div>
-      <span>{userName} is typing{dots}</span>
     </div>
   );
 };
