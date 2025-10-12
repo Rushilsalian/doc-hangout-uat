@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { UserPlus, LogIn, Stethoscope, LogOut, User, MessageCircle, Menu, Download, Users, Trophy, Search, Bookmark, Brain } from "lucide-react";
+import { UserPlus, LogIn, Stethoscope, LogOut, User, MessageCircle, Menu, Download, Users, Trophy, Search, Bookmark, Brain, FileText } from "lucide-react";
 import { useAuth } from '@/hooks/useAuth';
 import { usePWA } from '@/hooks/usePWA';
 import { useProfiles } from '@/hooks/useProfiles';
@@ -73,9 +73,17 @@ const Header = () => {
                 <Trophy className="h-4 w-4" />
                 Leaderboard
               </Link>
-              <Link to="/search" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
-                <Search className="h-4 w-4" />
-                Advanced
+              <Link to="/profile-completion" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
+                <User className="h-4 w-4" />
+                Profile
+              </Link>
+              <Link to="/saved-posts" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
+                <Bookmark className="h-4 w-4" />
+                Saved
+              </Link>
+              <Link to="/collaborate" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
+                <FileText className="h-4 w-4" />
+                Collaborate
               </Link>
             </>
           ) : (
@@ -206,10 +214,15 @@ const Header = () => {
                       <Trophy className="h-5 w-5" />
                       Leaderboard
                     </Link>
-                    <Link to="/search" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
-                      <Search className="h-5 w-5" />
-                      Advanced Search
+                    <Link to="/saved-posts" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
+                      <Bookmark className="h-5 w-5" />
+                      Saved Posts
                     </Link>
+                    <Link to="/collaborate" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
+                      <FileText className="h-5 w-5" />
+                      Collaborate
+                    </Link>
+
                     <Link to="/profile-completion" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
                       <User className="h-5 w-5" />
                       Profile

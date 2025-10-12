@@ -57,7 +57,7 @@ const Collaborate = () => {
     voteOnPost,
     deletePost
   } = usePosts();
-  const { communities, loading: communitiesLoading } = useCommunities();
+  const { communities, loading: communitiesLoading, joinCommunity, leaveCommunity } = useCommunities();
   const { updateKarma } = useKarmaSystem();
   const { moderateContent } = useModerationSystem();
   const { topics: trendingTopics, loading: topicsLoading, getTrendTypeLabel, getTrendTypeVariant } = useTrendingTopics();
@@ -129,6 +129,14 @@ const Collaborate = () => {
 
   const handleDelete = async (postId: string) => {
     await deletePost(postId);
+  };
+
+  const handleJoinCommunity = async (communityId: string) => {
+    await joinCommunity(communityId);
+  };
+
+  const handleLeaveCommunity = async (communityId: string) => {
+    await leaveCommunity(communityId);
   };
 
   const addTag = () => {
@@ -472,9 +480,25 @@ const Collaborate = () => {
                       </div>
                       <span className="text-sm font-medium">r/{community.name}</span>
                     </div>
-                    <Button variant="ghibli" size="sm" className="h-6 px-2 text-xs">
-                      Join
-                    </Button>
+                    {community.is_member ? (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs border-ghibli-nature text-ghibli-nature"
+                        onClick={() => handleLeaveCommunity(community.id)}
+                      >
+                        Joined
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="ghibli" 
+                        size="sm" 
+                        className="h-6 px-2 text-xs"
+                        onClick={() => handleJoinCommunity(community.id)}
+                      >
+                        Join
+                      </Button>
+                    )}
                   </div>
                 ))}
                 <Button 

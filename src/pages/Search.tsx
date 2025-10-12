@@ -80,7 +80,23 @@ const Search = () => {
       <Header />
       <div className="container py-8">
         <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-4">
-          {/* Search Form */}
+          {/* Search Everything - Use header search for full functionality */}
+          <Card>
+            <CardContent className="p-4 sm:p-6 text-center">
+              <div className="space-y-4">
+                <SearchIcon className="h-12 w-12 text-muted-foreground mx-auto" />
+                <div>
+                  <h2 className="text-xl font-semibold mb-2">Search Everything</h2>
+                  <p className="text-muted-foreground">
+                    Use the search bar in the header to search posts, communities, and users with advanced filters and AI-powered search.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Advanced Search Form - Commented Out */}
+          {/*
           <Card>
             <CardContent className="p-4 sm:p-6">
               <form onSubmit={handleSearch} className="space-y-4">
@@ -94,7 +110,6 @@ const Search = () => {
                   />
                 </div>
                 
-                {/* Filters */}
                 <div className="flex flex-wrap gap-2 sm:gap-4">
                   <Select value={filters.timeRange} onValueChange={(value: any) => setFilters(prev => ({ ...prev, timeRange: value }))}>
                     <SelectTrigger className="w-24 sm:w-32">
@@ -136,7 +151,6 @@ const Search = () => {
                   </Button>
                 </div>
                 
-                {/* AI Search Toggle */}
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -153,8 +167,10 @@ const Search = () => {
               </form>
             </CardContent>
           </Card>
+          */}
 
-          {/* Results */}
+          {/* Results - Commented Out */}
+          {/*
           {query && (
             <Tabs defaultValue="posts" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
@@ -265,6 +281,7 @@ const Search = () => {
               </TabsContent>
             </Tabs>
           )}
+          */}
         </div>
       </div>
     </div>
