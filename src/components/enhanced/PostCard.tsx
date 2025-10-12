@@ -12,7 +12,6 @@ import {
   Share, 
   Bookmark, 
   BookmarkCheck,
-  Award,
   MoreVertical,
   Play,
   Image as ImageIcon,
@@ -44,7 +43,6 @@ interface PostCardProps {
   post: Post;
   onVote?: (postId: string, voteType: 'upvote' | 'downvote') => void;
   onComment?: (postId: string) => void;
-  onShare?: (post: Post) => void;
   onDelete?: (postId: string) => void;
   showCommunity?: boolean;
   compact?: boolean;
@@ -54,7 +52,6 @@ export const PostCard = ({
   post, 
   onVote, 
   onComment, 
-  onShare, 
   onDelete,
   showCommunity = false,
   compact = false 
@@ -136,6 +133,42 @@ export const PostCard = ({
     if (window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
       onDelete?.(post.id);
     }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: post.title,
+      text: post.content.substring(0, 100) + '...',
+      url: window.location.origin + '/post/' + post.id
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          fallbackShare();
+        }
+      }
+    } else {
+      fallbackShare();
+    }
+  };
+
+  const fallbackShare = () => {
+    const url = window.location.origin + '/post/' + post.id;
+    navigator.clipboard.writeText(url).then(() => {
+      toast({
+        title: "Link copied!",
+        description: "Post link has been copied to clipboard"
+      });
+    }).catch(() => {
+      toast({
+        title: "Share",
+        description: `Share this post: ${url}`,
+        variant: "default"
+      });
+    });
   };
 
   const isAuthor = user?.id === post.author_id;
@@ -319,7 +352,7 @@ export const PostCard = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onShare?.(post)}
+                  onClick={handleShare}
                   className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
                 >
                   <Share className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
@@ -353,11 +386,6 @@ export const PostCard = ({
                 >
                   <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
                   <span>AI Summary</span>
-                </Button>
-
-                <Button variant="ghost" size="sm" className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs">
-                  <Award className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                  <span>Award</span>
                 </Button>
               </div>
               

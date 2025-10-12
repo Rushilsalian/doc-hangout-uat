@@ -421,10 +421,6 @@ const Collaborate = () => {
                       post={post}
                       onVote={handleVote}
                       onDelete={handleDelete}
-                      onShare={(post) => {
-                        navigator.clipboard.writeText(`${post.title} - ${window.location.origin}/collaborate`);
-                        toast({ title: "Link copied to clipboard!" });
-                      }}
                       showCommunity={true}
                     />
                   </div>
