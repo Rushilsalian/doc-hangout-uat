@@ -294,6 +294,62 @@ export const usePosts = (communityId?: string) => {
     }
   };
 
+  const deletePost = async (postId: string) => {
+    if (!user) {
+      toast({ 
+        title: "Authentication required", 
+        description: "Please sign in to delete posts",
+        variant: "destructive" 
+      });
+      return false;
+    }
+
+    try {
+      // First check if user owns the post
+      const { data: post, error: fetchError } = await supabase
+        .from('posts')
+        .select('author_id')
+        .eq('id', postId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      if (post.author_id !== user.id) {
+        toast({ 
+          title: "Unauthorized", 
+          description: "You can only delete your own posts",
+          variant: "destructive" 
+        });
+        return false;
+      }
+
+      // Delete the post
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', postId)
+        .eq('author_id', user.id); // Extra security check
+
+      if (error) throw error;
+
+      toast({ 
+        title: "Post deleted", 
+        description: "Your post has been successfully deleted" 
+      });
+      
+      await refetch(); // Refresh posts
+      return true;
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({ 
+        title: "Error", 
+        description: "Failed to delete post",
+        variant: "destructive" 
+      });
+      return false;
+    }
+  };
+
 
 
   return {
@@ -304,6 +360,7 @@ export const usePosts = (communityId?: string) => {
     isFetchingNextPage,
     createPost,
     voteOnPost,
+    deletePost,
     refetch
   };
 };

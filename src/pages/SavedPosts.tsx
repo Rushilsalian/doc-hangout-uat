@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { PostCard } from "@/components/enhanced/PostCard";
 import { useSavedPosts } from "@/hooks/useSavedPosts";
 import { useAuth } from "@/hooks/useAuth";
+import { usePosts } from "@/hooks/usePosts";
 import { Bookmark, BookmarkX } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const SavedPosts = () => {
   const { user } = useAuth();
   const { savedPosts, loading, unsavePost } = useSavedPosts();
+  const { deletePost } = usePosts();
   const navigate = useNavigate();
 
   const handleUnsave = async (postId: string) => {
@@ -23,6 +25,10 @@ const SavedPosts = () => {
         description: "Removed from your saved posts"
       });
     }
+  };
+
+  const handleDelete = async (postId: string) => {
+    await deletePost(postId);
   };
 
   if (!user) {
@@ -94,6 +100,7 @@ const SavedPosts = () => {
                 <div key={post.id} className="relative">
                   <PostCard
                     post={post}
+                    onDelete={handleDelete}
                     showCommunity={true}
                   />
                   <Button

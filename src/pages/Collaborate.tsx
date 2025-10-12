@@ -54,7 +54,8 @@ const Collaborate = () => {
     hasNextPage, 
     isFetchingNextPage,
     createPost, 
-    voteOnPost 
+    voteOnPost,
+    deletePost
   } = usePosts();
   const { communities, loading: communitiesLoading } = useCommunities();
   const { updateKarma } = useKarmaSystem();
@@ -124,6 +125,10 @@ const Collaborate = () => {
     if (success && voteType === 'upvote') {
       updateKarma('GIVE_UPVOTE', 'Gave an upvote');
     }
+  };
+
+  const handleDelete = async (postId: string) => {
+    await deletePost(postId);
   };
 
   const addTag = () => {
@@ -415,6 +420,7 @@ const Collaborate = () => {
                     <PostCard
                       post={post}
                       onVote={handleVote}
+                      onDelete={handleDelete}
                       onShare={(post) => {
                         navigator.clipboard.writeText(`${post.title} - ${window.location.origin}/collaborate`);
                         toast({ title: "Link copied to clipboard!" });

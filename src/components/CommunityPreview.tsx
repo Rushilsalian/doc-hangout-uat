@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { useKarma } from "@/hooks/useKarma";
 import { useCommunities } from "@/hooks/useCommunities";
 import { usePosts } from "@/hooks/usePosts";
+import { useAuth } from "@/hooks/useAuth";
 import ghibliCollaboration from "@/assets/ghibli-collaboration.jpg";
 import { 
   Heart, 
@@ -18,7 +19,8 @@ import {
   MessageCircle, 
   ArrowUp, 
   Clock,
-  Sparkles 
+  Sparkles,
+  Trash2
 } from "lucide-react";
 
 // Icon mapping for dynamic communities
@@ -35,9 +37,14 @@ const getIconComponent = (iconName: string) => {
 
 const CommunityPreview = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   const { communities, loading: communitiesLoading, joinCommunity } = useCommunities();
-  const { posts, loading: postsLoading } = usePosts();
+  const { posts, loading: postsLoading, deletePost } = usePosts();
+
+  const handleDelete = async (postId: string) => {
+    await deletePost(postId);
+  };
 
   const handleJoinCommunity = async (communityId: string) => {
     const success = await joinCommunity(communityId);
@@ -190,9 +197,26 @@ const CommunityPreview = () => {
                               </Badge>
                             ))}
                           </div>
-                          <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
-                            <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
-                            <span>{post.comments?.length || 0} comments</span>
+                          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                              <span>{post.comments?.length || 0} comments</span>
+                            </div>
+                            {user?.id === post.author_id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  if (window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+                                    handleDelete(post.id);
+                                  }
+                                }}
+                                className="h-6 px-2 text-destructive hover:bg-destructive/20"
+                              >
+                                <Trash2 className="h-3 w-3 mr-1" />
+                                <span>Delete</span>
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </div>

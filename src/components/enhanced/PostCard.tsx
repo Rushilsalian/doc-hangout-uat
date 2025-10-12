@@ -18,7 +18,8 @@ import {
   Image as ImageIcon,
   FileText,
   BarChart3,
-  Sparkles
+  Sparkles,
+  Trash2
 } from "lucide-react";
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from "@/hooks/use-toast";
@@ -44,6 +45,7 @@ interface PostCardProps {
   onVote?: (postId: string, voteType: 'upvote' | 'downvote') => void;
   onComment?: (postId: string) => void;
   onShare?: (post: Post) => void;
+  onDelete?: (postId: string) => void;
   showCommunity?: boolean;
   compact?: boolean;
 }
@@ -53,6 +55,7 @@ export const PostCard = ({
   onVote, 
   onComment, 
   onShare, 
+  onDelete,
   showCommunity = false,
   compact = false 
 }: PostCardProps) => {
@@ -124,6 +127,26 @@ export const PostCard = ({
       if (success) setIsSaved(true);
     }
   };
+
+  const handleDelete = async () => {
+    if (!user || user.id !== post.author_id) {
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      onDelete?.(post.id);
+    }
+  };
+
+  const isAuthor = user?.id === post.author_id;
+  
+  // Debug logging
+  console.log('PostCard Debug:', {
+    userId: user?.id,
+    authorId: post.author_id,
+    isAuthor,
+    onDelete: !!onDelete
+  });
 
   const getPostTypeIcon = () => {
     switch (post.post_type) {
@@ -278,63 +301,77 @@ export const PostCard = ({
             )}
 
             {/* Reddit-style Action Bar */}
-            <div className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setShowComments(!showComments);
-                  onComment?.(post.id);
-                }}
-                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
-              >
-                <MessageCircle className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                <span>{commentCount} comments</span>
-              </Button>
+            <div className="flex flex-wrap items-center justify-between gap-1 text-xs text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setShowComments(!showComments);
+                    onComment?.(post.id);
+                  }}
+                  className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
+                >
+                  <MessageCircle className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                  <span>{commentCount} comments</span>
+                </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onShare?.(post)}
-                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
-              >
-                <Share className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                <span>Share</span>
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onShare?.(post)}
+                  className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
+                >
+                  <Share className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                  <span>Share</span>
+                </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSave}
-                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
-              >
-                {isSaved ? (
-                  <>
-                    <BookmarkCheck className="h-2 w-2 sm:h-3 sm:w-3 mr-1 text-ghibli-nature" />
-                    <span>Saved</span>
-                  </>
-                ) : (
-                  <>
-                    <Bookmark className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                    <span>Save</span>
-                  </>
-                )}
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleSave}
+                  className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs"
+                >
+                  {isSaved ? (
+                    <>
+                      <BookmarkCheck className="h-2 w-2 sm:h-3 sm:w-3 mr-1 text-ghibli-nature" />
+                      <span>Saved</span>
+                    </>
+                  ) : (
+                    <>
+                      <Bookmark className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                      <span>Save</span>
+                    </>
+                  )}
+                </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAISummary(!showAISummary)}
-                className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-primary/20 rounded-full text-xs"
-              >
-                <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                <span>AI Summary</span>
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAISummary(!showAISummary)}
+                  className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-primary/20 rounded-full text-xs"
+                >
+                  <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                  <span>AI Summary</span>
+                </Button>
 
-              <Button variant="ghost" size="sm" className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs">
-                <Award className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
-                <span>Award</span>
-              </Button>
+                <Button variant="ghost" size="sm" className="h-6 sm:h-7 px-1 sm:px-2 hover:bg-ghibli-sky/20 rounded-full text-xs">
+                  <Award className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                  <span>Award</span>
+                </Button>
+              </div>
+              
+              {isAuthor && onDelete && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDelete}
+                  className="h-6 sm:h-7 px-2 text-xs"
+                >
+                  <Trash2 className="h-3 w-3 mr-1" />
+                  Delete
+                </Button>
+              )}
             </div>
           </div>
         </div>
