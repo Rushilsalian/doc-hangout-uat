@@ -4,6 +4,7 @@ import CommunityPreview from "@/components/CommunityPreview";
 import AuthSection from "@/components/AuthSection";
 import TrendingPosts from "@/components/TrendingPosts";
 import TrendingTopics from "@/components/TrendingTopics";
+import LeaderboardPreview from "@/components/LeaderboardPreview";
 import { FriendRequestNotifications } from "@/components/FriendRequestNotifications";
 import { useAuth } from "@/hooks/useAuth";
 import diningImage from "@/assets/doc-hangout-dining.webp";
@@ -28,6 +29,7 @@ const Index = () => {
               <div className="lg:col-span-1 hidden lg:block space-y-4">
                 <TrendingPosts />
                 <TrendingTopics limit={5} showGrowthRate={false} />
+                <LeaderboardPreview />
               </div>
             </div>
           </div>
