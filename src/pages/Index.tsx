@@ -41,7 +41,7 @@ const Index = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-8 sm:mt-12">
                 <div className="space-y-3 sm:space-y-4 p-4 text-center">
-                  <img src={worldImage} alt="Global medical community" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
+                  <img src={worldImage} alt="Global medical community" className="w-36 h-36 sm:w-40 sm:h-40 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Verified Community</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Join a community of verified medical professionals with automated credential verification.
@@ -49,7 +49,7 @@ const Index = () => {
                 </div>
                 
                 <div className="space-y-3 sm:space-y-4 p-4 text-center">
-                  <img src={diningImage} alt="Medical collaboration" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
+                  <img src={diningImage} alt="Medical collaboration" className="w-36 h-36 sm:w-40 sm:h-40 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Collaborate Safely</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Discuss cases, share insights, and get second opinions in a HIPAA-compliant environment.
@@ -57,7 +57,7 @@ const Index = () => {
                 </div>
                 
                 <div className="space-y-3 sm:space-y-4 p-4 text-center">
-                  <img src={girlImage} alt="Medical professional" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto object-cover shadow-md" />
+                  <img src={girlImage} alt="Medical professional" className="w-36 h-36 sm:w-40 sm:h-40 rounded-full mx-auto object-cover shadow-md" />
                   <h3 className="text-lg sm:text-xl font-semibold">Specialty Focus</h3>
                   <p className="text-sm sm:text-base text-muted-foreground">
                     Connect with specialists in your field and explore other medical disciplines.
