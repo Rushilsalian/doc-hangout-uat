@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search as SearchIcon, Clock, TrendingUp, Users, MessageSquare, Star } from "lucide-react";
+import { Search as SearchIcon, Clock, TrendingUp, Users, MessageSquare, Star, Brain } from "lucide-react";
 import { globalSearch, SearchFilters } from '@/api/search';
 import { useAI } from '@/hooks/useAI';
 import IntelligentSearch from '@/components/IntelligentSearch';

@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { FriendRequestsDropdown } from './FriendRequestsDropdown';
 import { useMessages } from '@/hooks/useMessages';
 import { Badge } from '@/components/ui/badge';
+import MasterSearch from '@/components/MasterSearch';
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -40,15 +41,19 @@ const Header = () => {
            </span>
         </Link>
 
+        {/* Master Search - Desktop */}
+        {user && (
+          <div className="hidden md:block flex-1 max-w-md mx-8">
+            <MasterSearch />
+          </div>
+        )}
+
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-4">
           {user ? (
             <>
               <Link to="/communities" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors font-medium">
                 Communities
-              </Link>
-              <Link to="/collaborate" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors font-medium">
-                Collaborate
               </Link>
               <Link to="/messages" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-2 font-medium">
                 <MessageCircle className="h-4 w-4" />
@@ -65,15 +70,7 @@ const Header = () => {
               </Link>
               <Link to="/search" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
                 <Search className="h-4 w-4" />
-                Search
-              </Link>
-              <Link to="/saved-posts" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
-                <Bookmark className="h-4 w-4" />
-                Saved
-              </Link>
-              <Link to="/profile-completion" className="text-ghibli-nature/80 hover:text-ghibli-nature transition-colors flex items-center gap-1 font-medium">
-                <User className="h-4 w-4" />
-                Profile
+                Advanced
               </Link>
             </>
           ) : (
@@ -162,19 +159,26 @@ const Header = () => {
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-4 mt-8">
                 {user && (
-                  <div className="flex items-center gap-3 pb-4 border-b">
-                    <AvatarUpload 
-                      currentAvatar={userProfile?.avatar_url}
-                      displayName={userProfile?.display_name || user.user_metadata?.display_name || user.email || 'User'}
-                      onAvatarUpdate={handleAvatarUpdate}
-                      size="md"
-                    />
-                    <div className="flex flex-col">
-                      <span className="font-medium">
-                        {userProfile?.display_name || user.user_metadata?.display_name || user.email}
-                      </span>
+                  <>
+                    <div className="flex items-center gap-3 pb-4 border-b">
+                      <AvatarUpload 
+                        currentAvatar={userProfile?.avatar_url}
+                        displayName={userProfile?.display_name || user.user_metadata?.display_name || user.email || 'User'}
+                        onAvatarUpdate={handleAvatarUpdate}
+                        size="md"
+                      />
+                      <div className="flex flex-col">
+                        <span className="font-medium">
+                          {userProfile?.display_name || user.user_metadata?.display_name || user.email}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                    
+                    {/* Mobile Search */}
+                    <div className="pb-4 border-b">
+                      <MasterSearch />
+                    </div>
+                  </>
                 )}
                 
                 {user ? (
@@ -183,10 +187,7 @@ const Header = () => {
                       <Users className="h-5 w-5" />
                       Communities
                     </Link>
-                    <Link to="/collaborate" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
-                      <MessageCircle className="h-5 w-5" />
-                      Collaborate
-                    </Link>
+
                     <Link to="/messages" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between p-2 rounded hover:bg-secondary">
                       <div className="flex items-center gap-3">
                         <MessageCircle className="h-5 w-5" />
@@ -204,11 +205,7 @@ const Header = () => {
                     </Link>
                     <Link to="/search" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
                       <Search className="h-5 w-5" />
-                      Search
-                    </Link>
-                    <Link to="/saved-posts" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
-                      <Bookmark className="h-5 w-5" />
-                      Saved Posts
+                      Advanced Search
                     </Link>
                     <Link to="/profile-completion" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 p-2 rounded hover:bg-secondary">
                       <User className="h-5 w-5" />
