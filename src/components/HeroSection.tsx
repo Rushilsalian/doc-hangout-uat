@@ -74,6 +74,30 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
+        
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t border-ghibli-nature/20 text-center">
+          <p className="text-sm text-muted-foreground">
+            Developed By{" "}
+            <a 
+              href="https://rushils-salian.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-ghibli-nature hover:text-ghibli-sky transition-colors font-medium"
+            >
+              TechSpeeX
+            </a>
+            {" & "}
+            <a 
+              href="https://www.kanhaiyasuthar.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-ghibli-nature hover:text-ghibli-sky transition-colors font-medium"
+            >
+              Team
+            </a>
+          </p>
+        </div>
       </div>
     </section>
   );
