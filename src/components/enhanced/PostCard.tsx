@@ -66,6 +66,7 @@ export const PostCard = ({
   const [showComments, setShowComments] = useState(false);
   const [showAISummary, setShowAISummary] = useState(false);
   const [attachments, setAttachments] = useState<PostAttachment[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -280,7 +281,20 @@ export const PostCard = ({
             {/* Content */}
             {!compact && (
               <div className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
-                <p className="line-clamp-3">{post.content}</p>
+                <p className={cn(
+                  "whitespace-pre-wrap",
+                  !isExpanded && post.content.length > 200 && "line-clamp-3"
+                )}>
+                  {post.content}
+                </p>
+                {post.content.length > 200 && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-ghibli-nature hover:underline text-xs mt-1 font-medium"
+                  >
+                    {isExpanded ? 'Show less' : 'Show more'}
+                  </button>
+                )}
               </div>
             )}
 
