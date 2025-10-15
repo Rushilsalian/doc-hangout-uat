@@ -139,7 +139,6 @@ const MasterSearch = () => {
           </div>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => setShowFilters(!showFilters)}
             className="px-2"
           >
