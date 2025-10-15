@@ -28,12 +28,9 @@ const Auth = () => {
     email: '', 
     password: '', 
     confirmPassword: '',
-    displayName: '',
-    // Medical knowledge questions (compulsory)
-    question1Answer: '',
-    question2Answer: ''
+    displayName: ''
   });
-  const [oauthAnswers, setOauthAnswers] = useState({ question1Answer: '', question2Answer: '' });
+  const [medicalAnswers, setMedicalAnswers] = useState({ question1Answer: '', question2Answer: '' });
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -92,7 +89,7 @@ const Auth = () => {
     }
 
     // Check medical knowledge questions (compulsory for all users)
-    if (signUpData.question1Answer !== 'B' || signUpData.question2Answer !== 'C') {
+    if (medicalAnswers.question1Answer !== 'B' || medicalAnswers.question2Answer !== 'C') {
       setError('Please answer the medical knowledge questions correctly');
       return;
     }
@@ -153,21 +150,11 @@ const Auth = () => {
                   Continue with Google
                 </Button>
                 
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  onClick={() => handleOAuthSignIn('facebook')}
-                  disabled={isLoading}
-                >
-                  <svg className="w-4 h-4 mr-2" fill="#1877F2" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                  Continue with Facebook
-                </Button>
+
               </div>
             )}
             
-            {/* Medical Knowledge Questions for OAuth - only show for signup */}
+            {/* Medical Knowledge Questions - only show for signup */}
             {activeTab === 'signup' && (
               <div className="mb-4 sm:mb-6">
                 <h3 className="font-semibold mb-2 sm:mb-3 text-sm">Medical Knowledge Verification</h3>
@@ -190,10 +177,10 @@ const Auth = () => {
                         <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
                           <input
                             type="radio"
-                            name="oauthQuestion1"
+                            name="question1"
                             value={option.value}
-                            checked={oauthAnswers.question1Answer === option.value}
-                            onChange={(e) => setOauthAnswers(prev => ({ ...prev, question1Answer: e.target.value }))}
+                            checked={medicalAnswers.question1Answer === option.value}
+                            onChange={(e) => setMedicalAnswers(prev => ({ ...prev, question1Answer: e.target.value }))}
                             className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
                           />
                           <span className="text-sm">{option.label}</span>
@@ -216,10 +203,10 @@ const Auth = () => {
                         <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
                           <input
                             type="radio"
-                            name="oauthQuestion2"
+                            name="question2"
                             value={option.value}
-                            checked={oauthAnswers.question2Answer === option.value}
-                            onChange={(e) => setOauthAnswers(prev => ({ ...prev, question2Answer: e.target.value }))}
+                            checked={medicalAnswers.question2Answer === option.value}
+                            onChange={(e) => setMedicalAnswers(prev => ({ ...prev, question2Answer: e.target.value }))}
                             className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
                           />
                           <span className="text-sm">{option.label}</span>
@@ -235,7 +222,7 @@ const Auth = () => {
                     variant="outline" 
                     className="w-full" 
                     onClick={() => handleOAuthSignIn('google')}
-                    disabled={isLoading || oauthAnswers.question1Answer !== 'B' || oauthAnswers.question2Answer !== 'C'}
+                    disabled={isLoading || medicalAnswers.question1Answer !== 'B' || medicalAnswers.question2Answer !== 'C'}
                   >
                     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -246,17 +233,7 @@ const Auth = () => {
                     Continue with Google
                   </Button>
                   
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => handleOAuthSignIn('facebook')}
-                    disabled={isLoading || oauthAnswers.question1Answer !== 'B' || oauthAnswers.question2Answer !== 'C'}
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="#1877F2" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                    Continue with Facebook
-                  </Button>
+
                 </div>
               </div>
             )}
@@ -389,74 +366,12 @@ const Auth = () => {
                     </div>
                   </div>
                   
-                  {/* Medical Knowledge Questions (Compulsory for all users) */}
-                  <div>
-                    <h3 className="font-semibold mb-2 sm:mb-3 text-sm">Medical Knowledge Verification</h3>
-                    <p className="text-xs text-muted-foreground mb-3 sm:mb-4">
-                      Please answer these questions to verify your medical knowledge.
-                    </p>
-                    
-                    <div className="space-y-3 sm:space-y-4">
-                      <div className="space-y-2 sm:space-y-3">
-                        <Label className="text-xs sm:text-sm font-medium">
-                          1. The most common type of anemia worldwide is:
-                        </Label>
-                        <div className="space-y-1 sm:space-y-2">
-                          {[
-                            { value: 'A', label: 'Megaloblastic anemia' },
-                            { value: 'B', label: 'Iron deficiency anemia' },
-                            { value: 'C', label: 'Aplastic anemia' },
-                            { value: 'D', label: 'Hemolytic anemia' }
-                          ].map((option) => (
-                            <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="question1"
-                                value={option.value}
-                                checked={signUpData.question1Answer === option.value}
-                                onChange={(e) => setSignUpData(prev => ({ ...prev, question1Answer: e.target.value }))}
-                                className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                                required
-                              />
-                              <span className="text-sm">{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2 sm:space-y-3">
-                        <Label className="text-xs sm:text-sm font-medium">
-                          2. The causative agent of tuberculosis is:
-                        </Label>
-                        <div className="space-y-1 sm:space-y-2">
-                          {[
-                            { value: 'A', label: 'Mycobacterium leprae' },
-                            { value: 'B', label: 'Mycobacterium avium' },
-                            { value: 'C', label: 'Mycobacterium tuberculosis' },
-                            { value: 'D', label: 'Mycoplasma pneumoniae' }
-                          ].map((option) => (
-                            <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="question2"
-                                value={option.value}
-                                checked={signUpData.question2Answer === option.value}
-                                onChange={(e) => setSignUpData(prev => ({ ...prev, question2Answer: e.target.value }))}
-                                className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                                required
-                              />
-                              <span className="text-sm">{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={isLoading || signUpData.question1Answer !== 'B' || signUpData.question2Answer !== 'C'}
+                    disabled={isLoading || medicalAnswers.question1Answer !== 'B' || medicalAnswers.question2Answer !== 'C'}
                   >
                     {isLoading ? 'Creating Account...' : 'Create Account'}
                   </Button>
