@@ -9,8 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import { useCommunities, PostCategory } from "@/hooks/useCommunities";
 import { useKarmaSystem } from "@/hooks/useKarmaSystem";
+import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import { Heart, Brain, Eye, Bone, Users, MessageCircle, Plus, Check, GraduationCap, Stethoscope, Coffee } from "lucide-react";
+import { Heart, Brain, Eye, Bone, Users, MessageCircle, Plus, Check, GraduationCap, Stethoscope, Coffee, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import ghibliCollaboration from "@/assets/ghibli-collaboration.jpg";
 
@@ -28,14 +29,16 @@ const categoryConfig = {
 };
 
 const Communities = () => {
+  const { user } = useAuth();
   const { updateKarma } = useKarmaSystem();
-  const { communities, loading, joinCommunity, createCommunity, getPostsByCategory } = useCommunities();
+  const { communities, loading, joinCommunity, createCommunity, deleteCommunity, getPostsByCategory } = useCommunities();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newCommunity, setNewCommunity] = useState({ name: '', description: '' });
   const [selectedCommunity, setSelectedCommunity] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<PostCategory>('general');
   const [categoryPosts, setCategoryPosts] = useState<any[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const handleJoinCommunity = async (communityId: string) => {
     const success = await joinCommunity(communityId);
@@ -75,6 +78,20 @@ const Communities = () => {
     if (selectedCommunity) {
       loadCategoryPosts(selectedCommunity, category);
     }
+  };
+
+  const handleDeleteCommunity = async (communityId: string) => {
+    const success = await deleteCommunity(communityId);
+    if (success) {
+      setDeleteConfirm(null);
+    }
+  };
+
+  const canDeleteCommunity = (community: any) => {
+    if (!user) return false;
+    const isCreator = community.created_by === user.id;
+    const isAdmin = community.user_role === 'admin';
+    return isCreator || isAdmin;
   };
 
   if (loading) {
@@ -198,6 +215,18 @@ const Communities = () => {
                         View Posts
                       </Button>
                     )}
+                    
+                    {community.is_member && canDeleteCommunity(community) && (
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        className="w-full"
+                        onClick={() => setDeleteConfirm(community.id)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -205,6 +234,32 @@ const Communities = () => {
           })}
         </div>
         
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete Community</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Are you sure you want to delete "{communities.find(c => c.id === deleteConfirm)?.name}"? 
+                This action cannot be undone and will permanently delete all posts, comments, and memberships.
+              </p>
+              <div className="flex gap-2">
+                <Button 
+                  variant="destructive" 
+                  onClick={() => deleteConfirm && handleDeleteCommunity(deleteConfirm)}
+                >
+                  Delete Permanently
+                </Button>
+                <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
         {/* Community Posts Dialog */}
         {selectedCommunity && (
           <Dialog open={!!selectedCommunity} onOpenChange={() => setSelectedCommunity(null)}>
