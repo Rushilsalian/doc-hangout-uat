@@ -76,7 +76,7 @@ const AuthSection = () => {
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h3 className="text-2xl font-bold mb-8">Simple Verification Process</h3>
+            <h3 className="text-xl font-bold mb-8">Simple Verification Process</h3>
             <div className="space-y-6">
               {verificationSteps.map((step, index) => {
                 const IconComponent = step.icon;
@@ -99,7 +99,7 @@ const AuthSection = () => {
 
           <Card className="shadow-strong">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Get Started Today</CardTitle>
+              <CardTitle className="text-xl">Get Started Today</CardTitle>
               <p className="text-muted-foreground">
                 Join thousands of verified medical professionals
               </p>
