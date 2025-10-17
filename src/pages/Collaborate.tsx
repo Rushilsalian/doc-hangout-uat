@@ -75,6 +75,24 @@ const Collaborate = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [generatingImage, setGeneratingImage] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check for mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      // Keep sidebar open on desktop, closed on mobile by default
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const shareCardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -262,11 +280,27 @@ const Collaborate = () => {
       </div>
 
       {/* Three Column Layout */}
-      <div className="flex-1 flex overflow-hidden h-full">
-        {/* Left Sidebar - Fixed */}
-        {sidebarOpen && (
-          <div className="w-80 lg:w-80 md:w-72 sm:w-64 bg-background border-r border-border flex-shrink-0 overflow-y-auto">
+      <div className="flex-1 flex overflow-hidden h-full relative">
+        {/* Left Sidebar - Fixed on desktop, overlay on mobile */}
+        <div className={`
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${isMobile ? 'fixed inset-y-0 left-0 z-50 w-80' : 'relative w-80 lg:w-80 md:w-72'}
+          bg-background border-r border-border flex-shrink-0 overflow-y-auto transition-transform duration-300 ease-in-out
+        `}>
             <div className="p-2 sm:p-4 space-y-3">
+              {/* Mobile close button */}
+              {isMobile && (
+                <div className="flex justify-end mb-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="p-1 h-8 w-8"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
               {/* Quick Navigation */}
               <Card className="border-0 shadow-ghibli">
                 <CardContent className="p-4">
@@ -344,10 +378,17 @@ const Collaborate = () => {
               </Card>
             </div>
           </div>
+        
+        {/* Mobile overlay */}
+        {isMobile && sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40" 
+            onClick={() => setSidebarOpen(false)}
+          />
         )}
 
         {/* Main Content - Scrollable */}
-        <div className="flex-1 overflow-y-auto">
+        <div className={`flex-1 overflow-y-auto ${isMobile && sidebarOpen ? 'pointer-events-none' : ''}`}>
           <div className="p-2 sm:p-4 space-y-4">
             {/* Sort Bar */}
             <Card className="border-0 shadow-ghibli">
@@ -358,7 +399,7 @@ const Collaborate = () => {
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      className="p-1 h-8 w-8"
+                      className="p-1 h-8 w-8 md:hidden"
                       onClick={() => setSidebarOpen(!sidebarOpen)}
                     >
                       <Menu className="h-4 w-4" />
@@ -385,7 +426,7 @@ const Collaborate = () => {
                     </Button>
                   </div>
                   <Select value={filterBy} onValueChange={setFilterBy}>
-                    <SelectTrigger className="w-[140px] sm:w-[140px] w-[100px] border-0 bg-muted/50">
+                    <SelectTrigger className="w-[100px] sm:w-[140px] border-0 bg-muted/50">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border-0 shadow-ghibli">
@@ -459,7 +500,7 @@ const Collaborate = () => {
         </div>
 
         {/* Right Sidebar - Fixed */}
-        <div className="w-80 lg:w-80 md:w-72 bg-background border-l border-border flex-shrink-0 h-full overflow-y-auto hidden lg:block">
+        <div className="w-80 lg:w-80 md:w-72 bg-background border-l border-border flex-shrink-0 h-full overflow-y-auto hidden xl:block">
           <div className="p-2 sm:p-4 space-y-3 pb-8">
             <Card className="border-0 shadow-ghibli">
               <CardHeader className="pb-3">
