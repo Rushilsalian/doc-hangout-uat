@@ -1,6 +1,5 @@
-const CACHE_NAME = 'doc-hangout-v2';
+const CACHE_NAME = 'doc-hangout-v3';
 const urlsToCache = [
-  '/',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
@@ -19,18 +18,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Don't cache HTML files - let them be fetched fresh
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept').includes('text/html')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         if (response) {
           return response;
         }
-        return fetch(event.request).catch(() => {
-          // Return a basic offline page for navigation requests
-          if (event.request.mode === 'navigate') {
-            return caches.match('/');
-          }
-        });
+        return fetch(event.request);
       })
   );
 });
