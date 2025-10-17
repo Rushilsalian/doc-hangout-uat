@@ -80,14 +80,15 @@ const Index = () => {
           <p className="text-sm text-muted-foreground">
             Developed By{" "}
             <a 
-              href="https://rushils-salian.vercel.app/" 
+              // href="https://rushils-salian.vercel.app/" 
+              href="https://www.kanhaiyasuthar.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-ghibli-nature hover:text-ghibli-sky transition-colors font-medium"
             >
               TechSpeeX
             </a>
-            {" & "}
+            {/* {" & "}
             <a 
               href="https://www.kanhaiyasuthar.com" 
               target="_blank" 
@@ -95,7 +96,7 @@ const Index = () => {
               className="text-ghibli-nature hover:text-ghibli-sky transition-colors font-medium"
             >
               Team
-            </a>
+            </a> */}
           </p>
         </div>
       </footer>
